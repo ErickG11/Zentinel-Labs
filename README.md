@@ -38,6 +38,8 @@ Sin las variables de Resend el sitio funciona y el formulario ofrece WhatsApp co
 | `npm run test`                            | Tests unitarios (Vitest)                     |
 | `npm run test:e2e`                        | Tests E2E + accesibilidad (Playwright + axe) |
 
+Antes de `npm run test:e2e` ejecuta una sola vez `npx playwright install chromium`.
+
 ## Seguridad
 
 - CSP estricta con nonce por request (`src/proxy.ts`) y headers de seguridad (`src/lib/security/headers.ts`).

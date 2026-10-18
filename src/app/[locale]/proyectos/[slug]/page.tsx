@@ -13,7 +13,8 @@ import { Reveal } from '@/components/ui/reveal';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { SplitReveal } from '@/components/ui/split-reveal';
 import { getNextProject, getProjectBySlug, getProjectPath } from '@/content/projects';
-import { routing } from '@/i18n/routing';
+import { routing, type Locale } from '@/i18n/routing';
+import { buildAlternates } from '@/lib/seo';
 
 interface CasePageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -25,7 +26,13 @@ export async function generateMetadata({ params }: CasePageProps): Promise<Metad
   const project = getProjectBySlug(locale, slug);
   if (!project) return {};
   const t = await getTranslations({ locale, namespace: 'Case' });
-  return { title: t('metaTitle', { name: project.name }), description: project.summary };
+  const title = t('metaTitle', { name: project.name });
+  return {
+    title,
+    description: project.summary,
+    alternates: buildAlternates(locale, (option: Locale) => getProjectPath(option, project.slug)),
+    openGraph: { title, description: project.summary, images: [project.cover.src] },
+  };
 }
 
 export default async function CasePage({ params }: CasePageProps) {

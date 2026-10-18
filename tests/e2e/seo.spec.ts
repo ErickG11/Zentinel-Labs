@@ -39,3 +39,11 @@ test('unknown routes show the localized 404 page', async ({ page }) => {
   expect(response?.status()).toBe(404);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('This page does not exist');
 });
+
+test('case pages point hreflang to the localized path', async ({ page }) => {
+  await page.goto('/es/proyectos/gas-solutions');
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
+    'href',
+    /\/en\/work\/gas-solutions$/,
+  );
+});

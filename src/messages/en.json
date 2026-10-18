@@ -3,12 +3,17 @@
     "title": "Zentinel Labs — Custom software development",
     "description": "We design and build high-performance corporate websites, custom web applications and online stores."
   },
-  "Home": {
-    "eyebrow": "// zentinel-labs",
-    "title": "Custom software,",
-    "titleHighlight": "built to scale.",
-    "subtitle": "Corporate websites, web applications and e-commerce built with first-class technology.",
-    "status": "Site under construction"
+  "Hero": {
+    "status": "Available for new projects",
+    "title": "Custom software",
+    "titleHighlight": "that drives your business.",
+    "subtitle": "At Zentinel Labs we design and build fast, secure corporate websites, web applications and online stores made to grow with you.",
+    "primaryCta": "Get a quote",
+    "secondaryCta": "See our work",
+    "scroll": "Scroll"
+  },
+  "Ticker": {
+    "label": "Technologies we work with"
   },
   "ThemeToggle": {
     "label": "Toggle theme"

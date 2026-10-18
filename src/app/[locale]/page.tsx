@@ -2,7 +2,9 @@ import { getTranslations } from 'next-intl/server';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { Eyebrow } from '@/components/ui/eyebrow';
 import { Manifesto } from '@/components/sections/manifesto';
+import { Process } from '@/components/sections/process';
 import { Services } from '@/components/sections/services';
+import { Stats } from '@/components/sections/stats';
 import { GlassCard } from '@/components/ui/glass-card';
 
 export default async function HomePage() {
@@ -26,6 +28,8 @@ export default async function HomePage() {
       </div>
       <Manifesto />
       <Services />
+      <Process />
+      <Stats />
     </main>
   );
 }

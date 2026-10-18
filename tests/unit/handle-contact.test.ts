@@ -21,6 +21,16 @@ const buildDeps = (overrides: Partial<ContactDependencies> = {}): ContactDepende
 });
 
 describe('handleContactSubmission', () => {
+  it('consumes 5/hour per known ip and a separate 30/hour bucket for unknown ips', async () => {
+    const known = buildDeps();
+    await handleContactSubmission(valid, '1.1.1.1', known);
+    expect(known.rateLimiter.consume).toHaveBeenCalledWith('contact:1.1.1.1', 5);
+
+    const unknown = buildDeps();
+    await handleContactSubmission(valid, 'unknown', unknown);
+    expect(unknown.rateLimiter.consume).toHaveBeenCalledWith('contact:unknown', 30);
+  });
+
   it('sends the email for a valid, human, non-limited submission', async () => {
     const deps = buildDeps();
     await expect(handleContactSubmission(valid, '1.1.1.1', deps)).resolves.toEqual({

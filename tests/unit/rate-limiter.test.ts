@@ -21,4 +21,12 @@ describe('InMemoryRateLimiter', () => {
     expect((await limiter.consume('b')).allowed).toBe(true);
     expect((await limiter.consume('a')).allowed).toBe(false);
   });
+
+  it('honors a per-call limit override', async () => {
+    const limiter = new InMemoryRateLimiter({ limit: 1, windowMs: 1000, now: () => 0 });
+    expect((await limiter.consume('shared', 3)).allowed).toBe(true);
+    expect((await limiter.consume('shared', 3)).allowed).toBe(true);
+    expect((await limiter.consume('shared', 3)).allowed).toBe(true);
+    expect((await limiter.consume('shared', 3)).allowed).toBe(false);
+  });
 });

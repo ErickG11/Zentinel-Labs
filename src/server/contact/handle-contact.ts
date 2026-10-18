@@ -6,6 +6,7 @@ import {
   type ContactInput,
 } from '@/lib/validation/contact-schema';
 import type { Logger } from '@/server/logger';
+import { contactRateKey } from '@/server/security/rate-limit-policy';
 import type { RateLimiter } from '@/server/security/rate-limiter';
 
 export interface ContactDependencies {
@@ -35,7 +36,8 @@ export const handleContactSubmission = async (
   // 3. Rate limit antes de las llamadas externas.
   // Decisión: fail-open si el limiter falla (Turnstile sigue protegiendo el envío).
   try {
-    const limit = await deps.rateLimiter.consume(`contact:${ip}`);
+    const { key, limit: maxHits } = contactRateKey(ip);
+    const limit = await deps.rateLimiter.consume(key, maxHits);
     if (!limit.allowed) {
       deps.logger.warn('contact.rate_limited');
       return { ok: false, code: 'RATE_LIMITED' };

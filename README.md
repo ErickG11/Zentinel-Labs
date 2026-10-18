@@ -17,13 +17,14 @@ npm run dev                  # http://localhost:3000
 
 ## Variables de entorno
 
-| Variable                                                   | Uso                                             |
-| ---------------------------------------------------------- | ----------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`                                     | URL pública (canonical, sitemap, OG)            |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER`                              | Número de WhatsApp (solo dígitos)               |
-| `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | Envío del formulario con Resend                 |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`   | Cloudflare Turnstile (anti-bots)                |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`       | Rate limit compartido (requerido en serverless) |
+| Variable                                                   | Uso                                               |
+| ---------------------------------------------------------- | ------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                                     | URL pública (canonical, sitemap, OG)              |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER`                              | Número de WhatsApp (solo dígitos)                 |
+| `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | Envío del formulario con Resend                   |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`   | Cloudflare Turnstile (anti-bots)                  |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`       | Rate limit compartido (requerido en serverless)   |
+| `TRUSTED_PROXY`                                            | `vercel` / `cloudflare` / `other` / `none` (def.) |
 
 Sin las variables de Resend el sitio funciona y el formulario ofrece WhatsApp como alternativa.
 

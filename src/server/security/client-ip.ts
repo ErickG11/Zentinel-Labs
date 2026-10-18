@@ -1,24 +1,38 @@
 import 'server-only';
 import { isIP } from 'node:net';
 
-// IMPORTANTE: estas cabeceras solo son confiables si el despliegue está detrás de un
-// proxy que las sobrescriba (Vercel y Cloudflare lo hacen). Sin proxy, un cliente
-// podría falsificarlas y evadir el rate limit.
+// Modo de confianza en proxies (variable TRUSTED_PROXY). Solo se leen las cabeceras
+// que el proxy declarado sobrescribe; el resto se ignora porque el cliente las puede falsificar.
+export const TRUSTED_PROXY_MODES = ['vercel', 'cloudflare', 'other', 'none'] as const;
+export type TrustedProxy = (typeof TRUSTED_PROXY_MODES)[number];
+
+export const UNKNOWN_IP = 'unknown';
+
 const readSingle = (headers: Headers, name: string): string | undefined =>
   headers.get(name)?.trim() || undefined;
 
-const readForwardedFor = (headers: Headers): string | undefined =>
-  headers.get('x-forwarded-for')?.split(',')[0]?.trim() || undefined;
+// La entrada más a la derecha es la que añadió el proxy de confianza más cercano
+const readRightmostForwardedFor = (headers: Headers): string | undefined => {
+  const parts = headers.get('x-forwarded-for')?.split(',');
+  return parts?.[parts.length - 1]?.trim() || undefined;
+};
 
-export const getClientIp = (headers: Headers): string => {
-  const candidates = [
-    readSingle(headers, 'cf-connecting-ip'),
-    readSingle(headers, 'x-vercel-forwarded-for'),
-    readSingle(headers, 'x-real-ip'),
-    readForwardedFor(headers),
-  ];
-  for (const candidate of candidates) {
+const candidatesFor = (headers: Headers, mode: TrustedProxy): Array<string | undefined> => {
+  switch (mode) {
+    case 'vercel':
+      return [readSingle(headers, 'x-vercel-forwarded-for'), readSingle(headers, 'x-real-ip')];
+    case 'cloudflare':
+      return [readSingle(headers, 'cf-connecting-ip')];
+    case 'other':
+      return [readRightmostForwardedFor(headers)];
+    case 'none':
+      return [];
+  }
+};
+
+export const getClientIp = (headers: Headers, mode: TrustedProxy = 'none'): string => {
+  for (const candidate of candidatesFor(headers, mode)) {
     if (candidate && isIP(candidate) !== 0) return candidate;
   }
-  return 'unknown';
+  return UNKNOWN_IP;
 };

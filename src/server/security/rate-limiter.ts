@@ -3,6 +3,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import type { ServerEnv } from '@/server/env';
 import { logger } from '@/server/logger';
+import { CONTACT_LIMIT } from './rate-limit-policy';
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -11,7 +12,7 @@ export interface RateLimitResult {
 }
 
 export interface RateLimiter {
-  consume: (key: string) => Promise<RateLimitResult>;
+  consume: (key: string, limit?: number) => Promise<RateLimitResult>;
 }
 
 interface InMemoryOptions {
@@ -37,8 +38,9 @@ export class InMemoryRateLimiter implements RateLimiter {
     this.options = options;
   }
 
-  async consume(key: string): Promise<RateLimitResult> {
-    const { limit, windowMs, now = Date.now } = this.options;
+  async consume(key: string, limitOverride?: number): Promise<RateLimitResult> {
+    const { windowMs, now = Date.now } = this.options;
+    const limit = limitOverride ?? this.options.limit;
     const current = now();
     this.prune(current);
 
@@ -83,24 +85,38 @@ interface UpstashOptions {
 }
 
 export class UpstashRateLimiter implements RateLimiter {
-  private readonly ratelimit: Ratelimit;
+  private readonly redis: Redis;
+  private readonly defaultLimit: number;
+  private readonly limiters = new Map<number, Ratelimit>();
 
   constructor({ url, token, limit }: UpstashOptions) {
-    this.ratelimit = new Ratelimit({
-      redis: new Redis({ url, token }),
-      limiter: Ratelimit.slidingWindow(limit, '1 h'),
-      prefix: 'zl:ratelimit',
-    });
+    this.redis = new Redis({ url, token });
+    this.defaultLimit = limit;
   }
 
-  async consume(key: string): Promise<RateLimitResult> {
-    const { success, remaining, reset } = await this.ratelimit.limit(key);
+  // Un Ratelimit por cada límite distinto (IP conocida / desconocida), con prefijo propio
+  private getLimiter(limit: number): Ratelimit {
+    let limiter = this.limiters.get(limit);
+    if (!limiter) {
+      limiter = new Ratelimit({
+        redis: this.redis,
+        limiter: Ratelimit.slidingWindow(limit, '1 h'),
+        prefix: `zl:ratelimit:${limit}`,
+      });
+      this.limiters.set(limit, limiter);
+    }
+    return limiter;
+  }
+
+  async consume(key: string, limitOverride?: number): Promise<RateLimitResult> {
+    const { success, remaining, reset } = await this.getLimiter(
+      limitOverride ?? this.defaultLimit,
+    ).limit(key);
     return { allowed: success, remaining, resetAt: reset };
   }
 }
 
 let warnedInMemory = false;
-const CONTACT_LIMIT = 5;
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
 export const createContactRateLimiter = (env: ServerEnv): RateLimiter => {
@@ -113,7 +129,9 @@ export const createContactRateLimiter = (env: ServerEnv): RateLimiter => {
   }
   if (env.NODE_ENV === 'production' && !warnedInMemory) {
     warnedInMemory = true;
-    logger.warn('contact.rate_limiter_in_memory');
+    logger.warn('contact.rate_limiter_in_memory', {
+      hint: 'Sin Upstash el rate limit es por instancia: configura UPSTASH_REDIS_REST_URL/TOKEN en hosting serverless o multi-instancia',
+    });
   }
   return new InMemoryRateLimiter({ limit: CONTACT_LIMIT, windowMs: ONE_HOUR_MS });
 };

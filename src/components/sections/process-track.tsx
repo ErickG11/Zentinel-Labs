@@ -45,11 +45,14 @@ export function ProcessTrack({ steps }: { steps: ProcessStep[] }) {
       <div aria-hidden className="absolute top-0 left-0 hidden h-px w-full bg-border md:block">
         <div ref={lineRef} className="h-full w-full origin-left bg-ink" />
       </div>
-      <ol ref={trackRef} className="flex flex-col gap-6 md:w-max md:flex-row md:pt-12">
+      <ol
+        ref={trackRef}
+        className="flex flex-col gap-6 md:w-max md:flex-row md:pt-12 md:motion-reduce:w-full md:motion-reduce:flex-wrap"
+      >
         {steps.map((step) => (
           <li
             key={step.number}
-            className="flex flex-col gap-5 rounded-3xl p-8 glass md:w-[26rem] md:shrink-0"
+            className="flex flex-col gap-5 rounded-3xl p-8 glass md:w-[26rem] md:shrink-0 md:motion-reduce:w-[calc((100%-3rem)/3)]"
           >
             <span className="font-display text-6xl font-semibold tracking-tighter text-ink/15">
               {step.number}

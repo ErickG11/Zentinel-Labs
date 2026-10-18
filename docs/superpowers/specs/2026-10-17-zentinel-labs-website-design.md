@@ -136,7 +136,7 @@ Cada sección: eyebrow mono → h2 display (SplitText reveal por líneas) → co
 
 - **Campos**: nombre (2–80), email, empresa (opcional, ≤ 100), tipo de proyecto (`landing | webapp | ecommerce | other`), presupuesto (rangos enum), mensaje (20–2000), honeypot oculto, token Turnstile.
 - **Esquema Zod único** (`server/contact/schema.ts`) usado en cliente (RHF) y re-validado en servidor.
-- **Flujo servidor**: honeypot → rate limit por IP → verificación Turnstile → validación Zod → render de email con escape HTML → envío Resend (`reply_to` = email del cliente).
+- **Flujo servidor**: honeypot → rate limit por IP → validación Zod → verificación Turnstile → render de email con escape HTML → envío Resend (`replyTo` = email del cliente). La validación va antes del captcha porque es local y barata; el captcha implica una llamada externa.
 - **Respuesta**: `{ success: true, data, message }` / `{ success: false, error, message }`; mensajes localizados.
 - **Errores**: fallos de Resend/Turnstile se registran con `logger` (sin PII sensible) y el usuario ve un mensaje amigable con link a WhatsApp.
 - **Env** (`.env.example` provisto; Erick crea `.env.local`): `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `NEXT_PUBLIC_WHATSAPP_NUMBER`, `NEXT_PUBLIC_SITE_URL`, opcionales `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.

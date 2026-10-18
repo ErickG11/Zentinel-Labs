@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { useSmoothScroll } from '@/components/providers/smooth-scroll-provider';
 import { gsap } from '@/lib/gsap';
 import { markIntroDone } from '@/lib/intro';
 
@@ -11,6 +12,12 @@ export function Preloader() {
   const t = useTranslations('Preloader');
   const rootRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
+  const scroll = useSmoothScroll();
+  const scrollRef = useRef(scroll);
+
+  useEffect(() => {
+    scrollRef.current = scroll;
+  }, [scroll]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -21,8 +28,15 @@ export function Preloader() {
       return;
     }
 
+    const lock = scrollRef.current;
+    lock.stop();
     const counter = { value: 0 };
-    const timeline = gsap.timeline({ onComplete: markIntroDone });
+    const timeline = gsap.timeline({
+      onComplete: () => {
+        lock.start();
+        markIntroDone();
+      },
+    });
     timeline
       .to(counter, {
         value: 100,
@@ -35,6 +49,7 @@ export function Preloader() {
 
     return () => {
       timeline.kill();
+      lock.start();
     };
   }, []);
 

@@ -166,6 +166,19 @@ html.has-custom-cursor * {
   cursor: none;
 }
 
-html.has-custom-cursor :is(input, textarea, select) {
+html.has-custom-cursor
+  :is(
+    input:not(
+      [type='button'],
+      [type='submit'],
+      [type='reset'],
+      [type='checkbox'],
+      [type='radio'],
+      [type='range'],
+      [type='file']
+    ),
+    textarea,
+    select
+  ) {
   cursor: text;
 }

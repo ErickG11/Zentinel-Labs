@@ -18,11 +18,17 @@ const RING_SIZE: Record<CursorMode, { width: number; height: number }> = {
   text: { width: 3, height: 32 },
 };
 
+const CURSOR_ATTR_MODE: Record<string, CursorMode | undefined> = {
+  text: 'text',
+  link: 'link',
+  default: 'default',
+};
+
 const resolveCursorState = (target: EventTarget | null): CursorState => {
   if (!(target instanceof Element)) return { mode: 'default', label: null };
   const tagged = target.closest<HTMLElement>('[data-cursor]');
   if (tagged) {
-    const mode = tagged.dataset.cursor === 'text' ? 'text' : 'link';
+    const mode: CursorMode = CURSOR_ATTR_MODE[tagged.dataset.cursor ?? ''] ?? 'link';
     return { mode, label: tagged.dataset.cursorLabel ?? null };
   }
   if (target.closest('a, button, [role="button"], label, summary')) {
@@ -54,17 +60,20 @@ export function Cursor() {
       y.set(event.clientY);
       setVisible(true);
     };
-    const handleOver = (event: PointerEvent): void => setState(resolveCursorState(event.target));
+    const handleOver = (event: PointerEvent): void => {
+      const next = resolveCursorState(event.target);
+      setState((prev) => (prev.mode === next.mode && prev.label === next.label ? prev : next));
+    };
     const handleLeave = (): void => setVisible(false);
 
     window.addEventListener('pointermove', handleMove);
     window.addEventListener('pointerover', handleOver);
-    document.addEventListener('pointerleave', handleLeave);
+    root.addEventListener('mouseleave', handleLeave);
     return () => {
       root.classList.remove('has-custom-cursor');
       window.removeEventListener('pointermove', handleMove);
       window.removeEventListener('pointerover', handleOver);
-      document.removeEventListener('pointerleave', handleLeave);
+      root.removeEventListener('mouseleave', handleLeave);
     };
   }, [enabled, x, y]);
 
@@ -76,7 +85,7 @@ export function Cursor() {
     <div
       aria-hidden
       data-custom-cursor=""
-      className="pointer-events-none fixed inset-0 z-[90] mix-blend-difference"
+      className="pointer-events-none fixed inset-0 z-[110] mix-blend-difference"
       style={{ opacity: visible ? 1 : 0 }}
     >
       <motion.div

@@ -34,13 +34,6 @@
     "language": "Change language",
     "home": "Zentinel Labs — home"
   },
-  "Home": {
-    "eyebrow": "// zentinel-labs",
-    "title": "Custom software,",
-    "titleHighlight": "built to scale.",
-    "subtitle": "Corporate websites, web applications and e-commerce built with first-class technology.",
-    "status": "Site under construction"
-  },
   "Manifesto": {
     "eyebrow": "// manifesto",
     "text": "A website is not a digital brochure: it is the tool that works for your business around the clock. That is why we write every line from scratch, care about every millisecond of load time and design every interaction so your customers trust you from the very first click."

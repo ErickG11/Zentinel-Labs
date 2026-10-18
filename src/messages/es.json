@@ -34,13 +34,6 @@
     "language": "Cambiar idioma",
     "home": "Zentinel Labs — inicio"
   },
-  "Home": {
-    "eyebrow": "// zentinel-labs",
-    "title": "Software a medida,",
-    "titleHighlight": "hecho para escalar.",
-    "subtitle": "Webs corporativas, aplicaciones web y e-commerce construidos con tecnología de primer nivel.",
-    "status": "Sitio en construcción"
-  },
   "Manifesto": {
     "eyebrow": "// manifiesto",
     "text": "Una web no es un folleto digital: es la herramienta que trabaja por tu negocio las 24 horas. Por eso escribimos cada línea a medida, cuidamos cada milisegundo de carga y diseñamos cada interacción para que tus clientes confíen en ti desde el primer clic."

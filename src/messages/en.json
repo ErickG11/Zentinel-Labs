@@ -16,7 +16,8 @@
     "label": "Technologies we work with"
   },
   "ThemeToggle": {
-    "label": "Toggle theme"
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
   },
   "Preloader": {
     "label": "Loading Zentinel Labs"
@@ -32,7 +33,9 @@
     "close": "Close menu",
     "skip": "Skip to content",
     "language": "Change language",
-    "home": "Zentinel Labs — home"
+    "home": "Zentinel Labs — home",
+    "menuTitle": "Navigation menu",
+    "ctaShort": "Quote"
   },
   "Manifesto": {
     "eyebrow": "// manifesto",
@@ -109,7 +112,17 @@
       "CAPTCHA_FAILED": "We could not verify you are human. Please try again.",
       "EMAIL_FAILED": "We could not send your message. Try again or message us on WhatsApp.",
       "SERVICE_UNAVAILABLE": "The form is unavailable right now. Please message us on WhatsApp."
-    }
+    },
+    "counter": "{count}/{max}",
+    "minHint": "At least {min} characters",
+    "counterOk": "Minimum length reached.",
+    "counterNear": "{remaining} characters left.",
+    "counterMax": "You reached the {max} character limit.",
+    "captchaLabel": "Security check",
+    "sentTitle": "Message sent!",
+    "sentNext": "We will review your project details and send you a tailored proposal.",
+    "sentReply": "We will reply by email within 24 h.",
+    "sendAnother": "Send another message"
   },
   "NotFound": {
     "eyebrow": "// error 404",
@@ -140,8 +153,10 @@
     "location": "Santo Domingo, Ecuador · UTC−5",
     "meetings": "Video call meetings",
     "languages": "Service in Spanish and English",
-    "hint": "Drag to rotate · Wheel to zoom",
-    "error": "The map could not be loaded"
+    "hint": "Drag to rotate · Ctrl + scroll to zoom",
+    "error": "The map could not be loaded",
+    "globeLabel": "Interactive globe with a marker on Ecuador, where our team is based. Use the arrow keys to rotate and + or - to zoom.",
+    "retry": "Retry"
   },
   "Faq": {
     "eyebrow": "// faq",
@@ -176,6 +191,8 @@
       "live": "Live",
       "inDevelopment": "In development"
     },
-    "inDevelopmentNote": "This project is under development. The site will be published soon."
+    "inDevelopmentNote": "This project is under development. The site will be published soon.",
+    "ctaTitle": "Have a similar project?",
+    "ctaButton": "Get a quote"
   }
 }

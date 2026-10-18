@@ -16,7 +16,8 @@
     "label": "Tecnologías con las que trabajamos"
   },
   "ThemeToggle": {
-    "label": "Cambiar tema"
+    "toLight": "Cambiar a modo claro",
+    "toDark": "Cambiar a modo oscuro"
   },
   "Preloader": {
     "label": "Cargando Zentinel Labs"
@@ -32,7 +33,9 @@
     "close": "Cerrar menú",
     "skip": "Saltar al contenido",
     "language": "Cambiar idioma",
-    "home": "Zentinel Labs — inicio"
+    "home": "Zentinel Labs — inicio",
+    "menuTitle": "Menú de navegación",
+    "ctaShort": "Cotizar"
   },
   "Manifesto": {
     "eyebrow": "// manifiesto",
@@ -109,7 +112,17 @@
       "CAPTCHA_FAILED": "No pudimos verificar que eres humano. Inténtalo de nuevo.",
       "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
       "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
-    }
+    },
+    "counter": "{count}/{max}",
+    "minHint": "Mínimo {min} caracteres",
+    "counterOk": "Longitud mínima alcanzada.",
+    "counterNear": "Quedan {remaining} caracteres.",
+    "counterMax": "Llegaste al límite de {max} caracteres.",
+    "captchaLabel": "Verificación de seguridad",
+    "sentTitle": "¡Mensaje enviado!",
+    "sentNext": "Revisaremos los detalles de tu proyecto y te enviaremos una propuesta a medida.",
+    "sentReply": "Te responderemos por email en menos de 24 h.",
+    "sendAnother": "Enviar otro mensaje"
   },
   "NotFound": {
     "eyebrow": "// error 404",
@@ -140,8 +153,10 @@
     "location": "Santo Domingo, Ecuador · UTC−5",
     "meetings": "Reuniones por videollamada",
     "languages": "Atención en español e inglés",
-    "hint": "Arrastra para rotar · Rueda para zoom",
-    "error": "No se pudo cargar el mapa"
+    "hint": "Arrastra para rotar · Ctrl + scroll para zoom",
+    "error": "No se pudo cargar el mapa",
+    "globeLabel": "Globo terráqueo interactivo con un marcador en Ecuador, donde está nuestro equipo. Usa las flechas para rotar y + o - para acercar.",
+    "retry": "Reintentar"
   },
   "Faq": {
     "eyebrow": "// faq",
@@ -176,6 +191,8 @@
       "live": "En línea",
       "inDevelopment": "En desarrollo"
     },
-    "inDevelopmentNote": "Este proyecto está en desarrollo. Pronto publicaremos el sitio."
+    "inDevelopmentNote": "Este proyecto está en desarrollo. Pronto publicaremos el sitio.",
+    "ctaTitle": "¿Tienes un proyecto similar?",
+    "ctaButton": "Cotizar mi proyecto"
   }
 }

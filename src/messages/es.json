@@ -3,12 +3,17 @@
     "title": "Zentinel Labs — Desarrollo de software a medida",
     "description": "Diseñamos y desarrollamos webs corporativas, aplicaciones web a medida y tiendas online de alto rendimiento."
   },
-  "Home": {
-    "eyebrow": "// zentinel-labs",
-    "title": "Software a medida,",
-    "titleHighlight": "hecho para escalar.",
-    "subtitle": "Webs corporativas, aplicaciones web y e-commerce construidos con tecnología de primer nivel.",
-    "status": "Sitio en construcción"
+  "Hero": {
+    "status": "Disponibles para nuevos proyectos",
+    "title": "Software a medida",
+    "titleHighlight": "que impulsa tu negocio.",
+    "subtitle": "En Zentinel Labs diseñamos y desarrollamos webs corporativas, aplicaciones web y tiendas online rápidas, seguras y hechas para crecer contigo.",
+    "primaryCta": "Cotizar proyecto",
+    "secondaryCta": "Ver proyectos",
+    "scroll": "Scroll"
+  },
+  "Ticker": {
+    "label": "Tecnologías con las que trabajamos"
   },
   "ThemeToggle": {
     "label": "Cambiar tema"

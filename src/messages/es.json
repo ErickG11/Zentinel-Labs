@@ -128,5 +128,13 @@
       "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
       "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
     }
+  },
+  "Faq": {
+    "eyebrow": "// faq",
+    "title": "Preguntas frecuentes"
+  },
+  "WhatsApp": {
+    "label": "Escríbenos por WhatsApp",
+    "message": "Hola Zentinel Labs, quiero cotizar un proyecto."
   }
 }

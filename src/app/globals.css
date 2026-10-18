@@ -141,3 +141,17 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Texto que SplitText va a animar: oculto hasta que se divide (solo si hay movimiento) */
+html[data-motion='ok'] [data-split-pending] {
+  visibility: hidden;
+}
+
+/* El preloader solo existe en la primera visita de la sesión */
+html:not([data-intro='play']) [data-preloader] {
+  display: none;
+}
+
+@utility section-anchor {
+  scroll-margin-top: 6rem;
+}

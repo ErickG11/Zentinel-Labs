@@ -5,8 +5,10 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Background } from '@/components/layout/background';
+import { Providers } from '@/components/providers/providers';
 import { routing } from '@/i18n/routing';
 import { fontVariables } from '@/lib/fonts';
+import { introInitScript } from '@/lib/intro';
 import { CSP_NONCE_HEADER } from '@/lib/security/csp';
 import { themeInitScript } from '@/lib/theme';
 import '../globals.css';
@@ -39,10 +41,17 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
         />
+        <script
+          nonce={nonce}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: introInitScript }}
+        />
       </head>
       <body className="relative min-h-dvh">
         <Background />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <Providers>{children}</Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

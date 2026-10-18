@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import type { ProcessStep } from '@/content/process';
 import { gsap, useGSAP } from '@/lib/gsap';
 
-const DESKTOP_MOTION = '(min-width: 768px) and (prefers-reduced-motion: no-preference)';
+const DESKTOP_MOTION = '(min-width: 1024px) and (prefers-reduced-motion: no-preference)';
 
 export function ProcessTrack({ steps }: { steps: ProcessStep[] }) {
   const pinRef = useRef<HTMLDivElement>(null);
@@ -41,20 +41,23 @@ export function ProcessTrack({ steps }: { steps: ProcessStep[] }) {
   );
 
   return (
-    <div ref={pinRef} className="relative mt-16 overflow-hidden md:overflow-visible">
-      <div aria-hidden className="absolute top-0 left-0 hidden h-px w-full bg-border md:block">
+    <div ref={pinRef} className="relative mt-16 overflow-hidden lg:overflow-visible">
+      <div aria-hidden className="absolute top-0 left-0 hidden h-px w-full bg-border lg:block">
         <div ref={lineRef} className="h-full w-full origin-left bg-ink" />
       </div>
       <ol
         ref={trackRef}
-        className="flex flex-col gap-6 md:w-max md:flex-row md:pt-12 md:motion-reduce:w-full md:motion-reduce:flex-wrap"
+        className="flex flex-col gap-6 sm:flex-row sm:flex-wrap lg:w-max lg:flex-row lg:flex-nowrap lg:pt-12 lg:motion-reduce:w-full lg:motion-reduce:flex-wrap"
       >
         {steps.map((step) => (
           <li
             key={step.number}
-            className="flex flex-col gap-5 rounded-3xl p-8 glass md:w-[26rem] md:shrink-0 md:motion-reduce:w-[calc((100%-3rem)/3)]"
+            className="flex flex-col gap-5 rounded-3xl p-8 glass sm:w-[calc((100%-1.5rem)/2)] lg:w-[26rem] lg:shrink-0 lg:motion-reduce:w-[calc((100%-3rem)/3)]"
           >
-            <span className="font-display text-6xl font-semibold tracking-tighter text-ink/15">
+            <span
+              aria-hidden
+              className="font-display text-6xl font-semibold tracking-tighter text-ink/25"
+            >
               {step.number}
             </span>
             <h3 className="font-display text-2xl font-semibold tracking-tight">{step.title}</h3>

@@ -12,7 +12,7 @@ export async function Hero() {
 
   return (
     <section className="relative isolate flex min-h-dvh items-center overflow-hidden px-6 pt-36 pb-24">
-      <HeroVisual className="absolute top-1/2 right-[-35%] -z-10 aspect-square w-[min(120vw,920px)] -translate-y-1/2 sm:right-[-20%] lg:right-[-10%]" />
+      <HeroVisual className="absolute top-1/2 right-[-55%] -z-10 aspect-square w-[min(120vw,920px)] -translate-y-1/2 opacity-35 sm:right-[-20%] sm:opacity-100 lg:right-[-10%]" />
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.3fr_1fr]">
         <div className="flex flex-col gap-8">

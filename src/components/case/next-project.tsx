@@ -23,7 +23,13 @@ export function NextProject({ project, href, label }: NextProjectProps) {
         </span>
       </span>
       <span className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-25">
-        <Image src={project.cover.src} alt="" fill sizes="100vw" className="object-cover" />
+        <Image
+          src={project.cover.src}
+          alt=""
+          fill
+          sizes="(min-width: 1200px) 1152px, calc(100vw - 48px)"
+          className="object-cover"
+        />
       </span>
     </TransitionLink>
   );

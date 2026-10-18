@@ -46,7 +46,6 @@ const valid = {
   name: 'Ana Pérez',
   email: 'ana@empresa.com',
   projectType: 'webapp',
-  budget: '1000-3000',
   message: 'Necesitamos un sistema de reservas para nuestra clínica.',
   turnstileToken: 'token-123',
 };
@@ -81,7 +80,6 @@ describe('contactSchema hardening', () => {
         'name.min',
         'email.invalid',
         'projectType.required',
-        'budget.required',
         'message.min',
         'captcha.required',
       ]),
@@ -94,7 +92,6 @@ describe('renderContactEmail hardening', () => {
     name: 'Ana',
     email: 'ana@example.com',
     projectType: 'landing' as const,
-    budget: 'undecided' as const,
     message: 'Mensaje de prueba lo bastante largo.',
     turnstileToken: 't',
   };
@@ -120,11 +117,11 @@ describe('renderContactEmail hardening', () => {
     const { text } = renderContactEmail({
       ...base,
       name: 'Eve\nEmail: boss@corp.com',
-      company: 'ACME\nPresupuesto: gt-7000',
+      company: 'ACME\nTipo de proyecto: other',
     });
     const lines = text.split('\n');
     expect(lines[0]).toBe('Nombre: Eve Email: boss@corp.com');
     expect(lines.filter((line) => line.startsWith('Email:'))).toHaveLength(1);
-    expect(lines.filter((line) => line.startsWith('Presupuesto:'))).toHaveLength(1);
+    expect(lines.filter((line) => line.startsWith('Tipo de proyecto:'))).toHaveLength(1);
   });
 });

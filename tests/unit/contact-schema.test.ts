@@ -6,7 +6,6 @@ const valid = {
   email: 'ana@empresa.com',
   company: '',
   projectType: 'webapp',
-  budget: '1000-3000',
   message: 'Necesitamos un sistema de reservas para nuestra clínica.',
   turnstileToken: 'token-123',
   website: '',

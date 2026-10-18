@@ -26,7 +26,6 @@ export const renderContactEmail = (input: ContactInput): RenderedEmail => {
     ['Email', input.email],
     ['Empresa', input.company || '—'],
     ['Tipo de proyecto', input.projectType],
-    ['Presupuesto', input.budget],
   ];
 
   const htmlRows = rows

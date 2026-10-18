@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
 export const PROJECT_TYPES = ['landing', 'webapp', 'ecommerce', 'other'] as const;
-// TODO(Erick): confirmar rangos de presupuesto (USD)
-export const BUDGET_RANGES = ['lt-1000', '1000-3000', '3000-7000', 'gt-7000', 'undecided'] as const;
 
 // Caracteres de control y separadores de línea Unicode (evitan inyección en cabeceras/texto)
 const CONTROL_CHARS = /[\u0000-\u001f\u007f\u0085\u2028\u2029]/;
@@ -29,7 +27,6 @@ export const contactSchema = z.object({
     .refine(hasNoControlChars, 'company.invalid')
     .optional(),
   projectType: z.enum(PROJECT_TYPES, { error: 'projectType.required' }),
-  budget: z.enum(BUDGET_RANGES, { error: 'budget.required' }),
   message: z
     .string({ error: 'message.min' })
     .trim()

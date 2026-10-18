@@ -62,21 +62,13 @@
       "email": "Email",
       "company": "Empresa (opcional)",
       "message": "Cuéntanos sobre tu proyecto",
-      "projectType": "Tipo de proyecto",
-      "budget": "Presupuesto estimado"
+      "projectType": "Tipo de proyecto"
     },
     "projectTypes": {
       "landing": "Web / landing",
       "webapp": "App web a medida",
       "ecommerce": "E-commerce",
       "other": "Otro"
-    },
-    "budgets": {
-      "lt-1000": "Menos de $1.000",
-      "1000-3000": "$1.000 – $3.000",
-      "3000-7000": "$3.000 – $7.000",
-      "gt-7000": "Más de $7.000",
-      "undecided": "Aún no lo sé"
     },
     "submit": "Enviar solicitud",
     "sending": "Enviando…",
@@ -101,9 +93,6 @@
       },
       "projectType": {
         "required": "Elige un tipo de proyecto"
-      },
-      "budget": {
-        "required": "Elige un rango de presupuesto"
       },
       "message": {
         "min": "Cuéntanos un poco más (mínimo 20 caracteres)",

@@ -23,7 +23,6 @@ test('submits through the server action and offers WhatsApp when email is not co
   await form.getByLabel('Nombre').fill('Ana Pérez');
   await form.getByLabel('Email').fill('ana@empresa.com');
   await form.getByText('App web a medida').click();
-  await form.getByText('Aún no lo sé').click();
   await form
     .getByLabel('Cuéntanos sobre tu proyecto')
     .fill('Necesitamos un sistema de reservas para la clínica.');

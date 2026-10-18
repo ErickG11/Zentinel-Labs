@@ -7,7 +7,6 @@ const valid = {
   name: 'Ana Pérez',
   email: 'ana@empresa.com',
   projectType: 'landing',
-  budget: 'undecided',
   message: 'Queremos una landing para nuestro nuevo producto.',
   turnstileToken: 'token',
   website: '',

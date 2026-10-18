@@ -15,7 +15,6 @@ describe('renderContactEmail', () => {
     email: 'eve@example.com',
     company: '<b>ACME</b>',
     projectType: 'ecommerce' as const,
-    budget: 'undecided' as const,
     message: 'Hola <img src=x onerror=alert(1)>',
     turnstileToken: 't',
   };

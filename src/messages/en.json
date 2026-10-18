@@ -62,21 +62,13 @@
       "email": "Email",
       "company": "Company (optional)",
       "message": "Tell us about your project",
-      "projectType": "Project type",
-      "budget": "Estimated budget"
+      "projectType": "Project type"
     },
     "projectTypes": {
       "landing": "Website / landing",
       "webapp": "Custom web app",
       "ecommerce": "E-commerce",
       "other": "Other"
-    },
-    "budgets": {
-      "lt-1000": "Under $1,000",
-      "1000-3000": "$1,000 – $3,000",
-      "3000-7000": "$3,000 – $7,000",
-      "gt-7000": "Over $7,000",
-      "undecided": "Not sure yet"
     },
     "submit": "Send request",
     "sending": "Sending…",
@@ -101,9 +93,6 @@
       },
       "projectType": {
         "required": "Choose a project type"
-      },
-      "budget": {
-        "required": "Choose a budget range"
       },
       "message": {
         "min": "Tell us a bit more (at least 20 characters)",

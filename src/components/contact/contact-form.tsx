@@ -8,12 +8,7 @@ import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTheme } from '@/hooks/use-theme';
 import type { ApiResponse } from '@/lib/api-response';
-import {
-  BUDGET_RANGES,
-  contactSchema,
-  PROJECT_TYPES,
-  type ContactInput,
-} from '@/lib/validation/contact-schema';
+import { contactSchema, PROJECT_TYPES, type ContactInput } from '@/lib/validation/contact-schema';
 import { submitContact } from '@/server/contact/action';
 import { ChoiceGroup } from './choice-group';
 import { FloatingInput, FloatingTextarea } from './floating-field';
@@ -70,7 +65,6 @@ export function ContactForm({ turnstileSiteKey, whatsappUrl }: ContactFormProps)
     value,
     label: t(`projectTypes.${value}`),
   }));
-  const budgetOptions = BUDGET_RANGES.map((value) => ({ value, label: t(`budgets.${value}`) }));
 
   return (
     <form
@@ -109,13 +103,6 @@ export function ContactForm({ turnstileSiteKey, whatsappUrl }: ContactFormProps)
         options={projectOptions}
         registration={register('projectType')}
         error={errorText(errors.projectType?.message)}
-      />
-      <ChoiceGroup
-        name="budget"
-        legend={t('fields.budget')}
-        options={budgetOptions}
-        registration={register('budget')}
-        error={errorText(errors.budget?.message)}
       />
       <FloatingTextarea
         id="contact-message"

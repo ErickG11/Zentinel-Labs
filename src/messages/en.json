@@ -1,0 +1,16 @@
+{
+  "Metadata": {
+    "title": "Zentinel Labs — Custom software development",
+    "description": "We design and build high-performance corporate websites, custom web applications and online stores."
+  },
+  "Home": {
+    "eyebrow": "// zentinel-labs",
+    "title": "Custom software,",
+    "titleHighlight": "built to scale.",
+    "subtitle": "Corporate websites, web applications and e-commerce built with first-class technology.",
+    "status": "Site under construction"
+  },
+  "ThemeToggle": {
+    "label": "Toggle theme"
+  }
+}

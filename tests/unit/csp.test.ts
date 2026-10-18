@@ -36,6 +36,16 @@ describe('buildCsp', () => {
     );
   });
 
+  it('does not allow websockets or inline style elements in production', () => {
+    const csp = parseCsp(buildCsp(production));
+    expect(csp.get('connect-src')).not.toContain('ws:');
+    expect(csp.get('style-src-elem')).not.toContain("'unsafe-inline'");
+  });
+
+  it('allows websockets in development for HMR', () => {
+    expect(parseCsp(buildCsp({ ...production, isDev: true })).get('connect-src')).toContain('ws:');
+  });
+
   it('allows inline style attributes needed by animation libraries', () => {
     expect(parseCsp(buildCsp(production)).get('style-src-attr')).toEqual(["'unsafe-inline'"]);
   });

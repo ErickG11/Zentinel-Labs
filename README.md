@@ -48,6 +48,25 @@ Antes de `npm run test:e2e` ejecuta una sola vez `npx playwright install chromiu
 - Secretos solo en servidor, validados al arrancar (`src/server/env.ts`).
 - `npm audit` en CI y Dependabot semanal.
 
+## Despliegue
+
+- **Upstash es obligatorio en hosting serverless o con varias instancias.** Sin `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` el rate limit usa memoria por instancia (cada instancia cuenta por separado y se reinicia en cada arranque en frío), por lo que no limita de verdad. En producción la app registra un aviso `contact.rate_limiter_in_memory` al crear el limiter.
+- Define `TRUSTED_PROXY` según tu hosting (`vercel`, `cloudflare`, `other` o `none`). Con `none` toda solicitud comparte una cubeta de 30/hora.
+
+## Seguridad y despliegue
+
+Checklist antes de publicar:
+
+- [ ] Variables de entorno de producción definidas: `NEXT_PUBLIC_SITE_URL` (https, dominio final), `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `UPSTASH_REDIS_REST_URL`/`TOKEN` y `TRUSTED_PROXY`.
+- [ ] `TRUSTED_PROXY` coincide con el proxy real delante de la app. Un valor incorrecto permite falsificar la IP y evadir el rate limit.
+- [ ] Claves reales de Turnstile (no las de prueba `1x0000…`), con el widget restringido a tu dominio. En producción el servidor también valida el hostname de la respuesta contra `NEXT_PUBLIC_SITE_URL`.
+- [ ] Upstash configurado si el hosting es serverless o multi-instancia.
+- [ ] Dominio de Resend verificado con SPF, DKIM y DMARC.
+- [ ] El CDN no debe cachear el HTML con nonce por request (CSP) y debe variar por `RSC` y `Next-Router-Prefetch`, para no mezclar respuestas RSC con HTML ni servir nonces repetidos.
+- [ ] HSTS: la cabecera incluye `preload`; enviar el dominio a la lista de preload es difícil de revertir. Confirma que todos los subdominios soportan HTTPS antes.
+- [ ] Server Actions: `allowedOrigins` se deriva de `NEXT_PUBLIC_SITE_URL` (host y `www.`); en local aplica el chequeo de mismo origen por defecto.
+- [ ] Recomendado: publicar un aviso de privacidad, porque el formulario recoge nombre, correo y mensaje.
+
 ## Estructura
 
 ```

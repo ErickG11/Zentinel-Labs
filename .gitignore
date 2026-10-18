@@ -46,4 +46,8 @@ next-env.d.ts
 /blob-report
 /playwright/.cache
 
+# herramientas locales de IA
+.claude/
+.superpowers/
+
 !.env.example

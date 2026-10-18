@@ -5,7 +5,9 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Background } from '@/components/layout/background';
+import { Preloader } from '@/components/layout/preloader';
 import { Providers } from '@/components/providers/providers';
+import { Cursor } from '@/components/ui/cursor';
 import { routing } from '@/i18n/routing';
 import { fontVariables } from '@/lib/fonts';
 import { introInitScript } from '@/lib/intro';
@@ -50,7 +52,11 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <body className="relative min-h-dvh">
         <Background />
         <NextIntlClientProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            <Preloader />
+            {children}
+            <Cursor />
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>

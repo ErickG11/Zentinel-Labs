@@ -12,5 +12,8 @@
   },
   "ThemeToggle": {
     "label": "Toggle theme"
+  },
+  "Preloader": {
+    "label": "Loading Zentinel Labs"
   }
 }

@@ -168,3 +168,25 @@ html:not([data-intro='play']) [data-preloader] {
 @utility section-anchor {
   scroll-margin-top: 6rem;
 }
+
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none;
+}
+
+html.has-custom-cursor
+  :is(
+    input:not(
+      [type='button'],
+      [type='submit'],
+      [type='reset'],
+      [type='checkbox'],
+      [type='radio'],
+      [type='range'],
+      [type='file']
+    ),
+    textarea,
+    select
+  ) {
+  cursor: text;
+}

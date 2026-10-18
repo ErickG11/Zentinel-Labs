@@ -7,7 +7,7 @@ import { useState, type PointerEvent } from 'react';
 import { TransitionLink } from '@/components/providers/page-transition-provider';
 import type { Project } from '@/content/projects';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { EASE_OUT_EXPO, FINE_POINTER_QUERY } from '@/lib/motion';
+import { EASE_OUT_EXPO, FINE_POINTER_QUERY, REDUCED_MOTION_QUERY } from '@/lib/motion';
 
 export interface ProjectListItem {
   project: Project;
@@ -21,6 +21,7 @@ interface ProjectListProps {
 
 export function ProjectList({ items, viewLabel }: ProjectListProps) {
   const finePointer = useMediaQuery(FINE_POINTER_QUERY);
+  const reduceMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const [active, setActive] = useState<string | null>(null);
   const x = useSpring(useMotionValue(0), { stiffness: 180, damping: 22, mass: 0.6 });
   const y = useSpring(useMotionValue(0), { stiffness: 180, damping: 22, mass: 0.6 });
@@ -44,9 +45,14 @@ export function ProjectList({ items, viewLabel }: ProjectListProps) {
             key={project.slug}
             className="border-b border-border"
             initial={{ clipPath: 'inset(0% 0% 100% 0%)', opacity: 0 }}
+            animate={reduceMotion ? { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 } : undefined}
             whileInView={{ clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 1, ease: EASE_OUT_EXPO, delay: index * 0.08 }}
+            transition={{
+              duration: reduceMotion ? 0 : 1,
+              ease: EASE_OUT_EXPO,
+              delay: reduceMotion ? 0 : index * 0.08,
+            }}
             onPointerEnter={() => setActive(project.slug)}
           >
             <TransitionLink

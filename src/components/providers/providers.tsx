@@ -2,6 +2,7 @@
 
 import { MotionConfig } from 'motion/react';
 import { useEffect, type ReactNode } from 'react';
+import { PageTransitionProvider } from './page-transition-provider';
 import { SmoothScrollProvider } from './smooth-scroll-provider';
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -12,7 +13,9 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <SmoothScrollProvider>{children}</SmoothScrollProvider>
+      <SmoothScrollProvider>
+        <PageTransitionProvider>{children}</PageTransitionProvider>
+      </SmoothScrollProvider>
     </MotionConfig>
   );
 }

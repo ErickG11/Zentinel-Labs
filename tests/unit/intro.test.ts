@@ -12,6 +12,7 @@ import {
 const originalMatchMedia = window.matchMedia;
 
 afterEach(() => {
+  window.history.pushState({}, '', '/');
   vi.useRealTimers();
   window.matchMedia = originalMatchMedia;
   delete document.documentElement.dataset.intro;
@@ -51,7 +52,8 @@ describe('markIntroDone', () => {
 });
 
 describe('introInitScript', () => {
-  const run = (): void => {
+  const run = (path = '/es'): void => {
+    window.history.pushState({}, '', path);
     new Function(introInitScript)();
   };
 
@@ -61,6 +63,22 @@ describe('introInitScript', () => {
     expect(document.documentElement.dataset.intro).toBe('play');
     expect(document.documentElement.dataset.motion).toBe('ok');
   });
+
+  it.each(['/es', '/es/', '/en', '/en/'])('plays on the home route %s', (path) => {
+    window.matchMedia = vi.fn().mockReturnValue({ matches: false });
+    run(path);
+    expect(document.documentElement.dataset.intro).toBe('play');
+  });
+
+  it.each(['/es/proyectos/pan-de-vida', '/en/work/gas-solutions', '/es/no-existe', '/fr'])(
+    'skips the intro outside the home route %s',
+    (path) => {
+      window.matchMedia = vi.fn().mockReturnValue({ matches: false });
+      run(path);
+      expect(document.documentElement.dataset.intro).toBe('skip');
+      expect(document.documentElement.dataset.motion).toBe('ok');
+    },
+  );
 
   it('skips the intro when already seen this session', () => {
     window.matchMedia = vi.fn().mockReturnValue({ matches: false });

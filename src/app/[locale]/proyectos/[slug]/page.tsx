@@ -31,7 +31,19 @@ export async function generateMetadata({ params }: CasePageProps): Promise<Metad
     title,
     description: project.summary,
     alternates: buildAlternates(locale, (option: Locale) => getProjectPath(option, project.slug)),
-    openGraph: { title, description: project.summary, images: [project.cover.src] },
+    openGraph: {
+      type: 'article',
+      url: getProjectPath(locale, project.slug),
+      title,
+      description: project.summary,
+      images: [project.cover.src],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: project.summary,
+      images: [project.cover.src],
+    },
   };
 }
 
@@ -129,6 +141,27 @@ export default async function CasePage({ params }: CasePageProps) {
         ) : null}
 
         <CaseGallery images={project.gallery} />
+
+        <Reveal>
+          <section
+            aria-labelledby="case-cta-title"
+            className="flex flex-col items-start gap-6 rounded-3xl p-8 glass sm:p-12"
+          >
+            <h2
+              id="case-cta-title"
+              className="font-display text-3xl font-semibold tracking-tight sm:text-5xl"
+            >
+              {t('ctaTitle')}
+            </h2>
+            <Button
+              href={`/${locale}#contact`}
+              size="lg"
+              icon={<ArrowUpRight className="h-4 w-4" />}
+            >
+              {t('ctaButton')}
+            </Button>
+          </section>
+        </Reveal>
 
         <NextProject project={next} href={getProjectPath(locale, next.slug)} label={t('next')} />
       </article>

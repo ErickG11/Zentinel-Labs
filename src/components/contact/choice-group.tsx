@@ -1,5 +1,6 @@
 import type { UseFormRegisterReturn } from 'react-hook-form';
 import { cn } from '@/lib/utils';
+import { FieldError } from './field-error';
 
 interface ChoiceGroupProps {
   name: string;
@@ -21,7 +22,7 @@ export function ChoiceGroup({ name, legend, options, registration, error }: Choi
             <input type="radio" value={option.value} className="peer sr-only" {...registration} />
             <span
               className={cn(
-                'inline-flex h-10 items-center rounded-full border border-border px-4 text-sm text-muted transition-colors duration-300',
+                'inline-flex h-10 items-center rounded-full border border-border px-4 text-sm text-muted transition-colors duration-300 pointer-coarse:h-11',
                 'peer-checked:border-ink peer-checked:bg-ink peer-checked:text-page peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent hover:text-ink',
               )}
             >
@@ -30,11 +31,7 @@ export function ChoiceGroup({ name, legend, options, registration, error }: Choi
           </label>
         ))}
       </div>
-      {error ? (
-        <p id={`${name}-error`} className="mt-2 text-sm text-ink">
-          {error}
-        </p>
-      ) : null}
+      <FieldError id={`${name}-error`}>{error}</FieldError>
     </fieldset>
   );
 }

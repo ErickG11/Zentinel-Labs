@@ -2,7 +2,7 @@
 
 import { motion, useMotionValueEvent, useScroll } from 'motion/react';
 import { useTranslations } from 'next-intl';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState, type FocusEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { NAV_SECTIONS, SECTION_IDS } from '@/content/navigation';
 import { Link } from '@/i18n/navigation';
@@ -24,14 +24,25 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const focusWithinRef = useRef(false);
 
   useMotionValueEvent(scrollY, 'change', (current) => {
     const previous = scrollY.getPrevious() ?? 0;
     setScrolled(current > 20);
-    setHidden(current > HIDE_AFTER && current > previous && !menuOpen);
+    setHidden(current > HIDE_AFTER && current > previous && !menuOpen && !focusWithinRef.current);
   });
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
+
+  // Con el foco dentro de la cabecera nunca se oculta (navegacion por teclado)
+  const handleFocusCapture = (): void => {
+    focusWithinRef.current = true;
+    setHidden(false);
+  };
+  const handleBlurCapture = (event: FocusEvent<HTMLElement>): void => {
+    if (!event.currentTarget.contains(event.relatedTarget)) focusWithinRef.current = false;
+  };
 
   return (
     <>
@@ -42,6 +53,8 @@ export function Navbar() {
           scrolled ? 'py-3' : 'py-6',
         )}
         initial={{ y: -40, opacity: 0 }}
+        onFocusCapture={handleFocusCapture}
+        onBlurCapture={handleBlurCapture}
         animate={{ y: hidden ? '-120%' : 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
       >
@@ -69,15 +82,23 @@ export function Navbar() {
             <div className="hidden md:block">
               <LocaleSwitch />
             </div>
-            <ThemeToggle />
+            <div className="hidden sm:block">
+              <ThemeToggle />
+            </div>
             <div className="hidden sm:block">
               <Button href={contactHref} size="md">
                 {t('cta')}
               </Button>
             </div>
+            <div className="sm:hidden">
+              <Button href={contactHref} size="sm">
+                {t('ctaShort')}
+              </Button>
+            </div>
             <button
+              ref={toggleRef}
               type="button"
-              className="grid h-9 w-9 place-items-center rounded-full glass md:hidden"
+              className="grid h-11 w-11 place-items-center rounded-full glass md:hidden"
               aria-expanded={menuOpen}
               aria-controls={MOBILE_MENU_ID}
               aria-label={menuOpen ? t('close') : t('menu')}
@@ -101,7 +122,7 @@ export function Navbar() {
           </div>
         </nav>
       </motion.header>
-      <MobileMenu open={menuOpen} onClose={closeMenu} />
+      <MobileMenu open={menuOpen} onClose={closeMenu} toggleRef={toggleRef} />
     </>
   );
 }

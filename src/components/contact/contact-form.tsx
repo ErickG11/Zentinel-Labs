@@ -4,14 +4,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import { useInView } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { useTheme } from '@/hooks/use-theme';
 import type { ApiResponse } from '@/lib/api-response';
 import { contactSchema, PROJECT_TYPES, type ContactInput } from '@/lib/validation/contact-schema';
 import { submitContact } from '@/server/contact/action';
 import { ChoiceGroup } from './choice-group';
+import { ContactSuccess } from './contact-success';
+import { FieldError } from './field-error';
 import { FloatingInput, FloatingTextarea } from './floating-field';
+import {
+  getCounterState,
+  MESSAGE_MAX,
+  MESSAGE_MIN,
+  MessageCounter,
+  type CounterState,
+} from './message-counter';
 import { SubmitButton, type SubmitStatus } from './submit-button';
 
 interface ContactFormProps {
@@ -34,6 +43,7 @@ export function ContactForm({ turnstileSiteKey, whatsappUrl }: ContactFormProps)
     handleSubmit,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
@@ -46,6 +56,26 @@ export function ContactForm({ turnstileSiteKey, whatsappUrl }: ContactFormProps)
       website: '',
     },
   });
+
+  const messageLength = (useWatch({ control, name: 'message' }) ?? '').length;
+  const counterState = getCounterState(messageLength);
+  const counterAnnouncements: Record<CounterState, string> = {
+    empty: '',
+    'below-min': '',
+    ok: t('counterOk'),
+    'near-max': t('counterNear', { remaining: MESSAGE_MAX - messageLength }),
+    'at-max': t('counterMax', { max: MESSAGE_MAX }),
+  };
+
+  // Al aparecer el panel de exito el foco se mueve a el
+  useEffect(() => {
+    if (status === 'success') document.getElementById('contact-success')?.focus();
+  }, [status]);
+
+  const resetForm = (): void => {
+    setStatus('idle');
+    setResult(null);
+  };
 
   // Los mensajes del esquema son claves de traducción (p. ej. "name.min")
   const errorText = (message: string | undefined): string | undefined =>
@@ -108,6 +138,18 @@ export function ContactForm({ turnstileSiteKey, whatsappUrl }: ContactFormProps)
         id="contact-message"
         label={t('fields.message')}
         error={errorText(errors.message?.message)}
+        describedBy="contact-message-counter"
+        footer={
+          <MessageCounter
+            id="contact-message-counter"
+            count={messageLength}
+            labels={{
+              counter: t('counter', { count: messageLength, max: MESSAGE_MAX }),
+              minHint: t('minHint', { min: MESSAGE_MIN }),
+              announcement: counterAnnouncements[counterState],
+            }}
+          />
+        }
         {...register('message')}
       />
 
@@ -125,7 +167,11 @@ export function ContactForm({ turnstileSiteKey, whatsappUrl }: ContactFormProps)
 
       <input type="hidden" {...register('turnstileToken')} />
       {turnstileSiteKey && inView ? (
-        <div>
+        <div
+          role="group"
+          aria-label={t('captchaLabel')}
+          aria-describedby={errors.turnstileToken?.message ? 'turnstile-error' : undefined}
+        >
           <Turnstile
             key={theme}
             ref={turnstileRef}
@@ -134,39 +180,47 @@ export function ContactForm({ turnstileSiteKey, whatsappUrl }: ContactFormProps)
             onSuccess={(token) => setValue('turnstileToken', token, { shouldValidate: true })}
             onExpire={() => setValue('turnstileToken', '')}
           />
-          {errors.turnstileToken?.message ? (
-            <p className="mt-2 text-sm text-ink">{errorText(errors.turnstileToken.message)}</p>
-          ) : null}
+          <FieldError id="turnstile-error">{errorText(errors.turnstileToken?.message)}</FieldError>
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-5">
-        <SubmitButton
-          status={status}
-          labels={{
-            idle: t('submit'),
-            loading: t('sending'),
-            success: t('sent'),
-            error: t('retry'),
-          }}
+      {status === 'success' ? (
+        <ContactSuccess
+          title={t('sentTitle')}
+          next={t('sentNext')}
+          reply={t('sentReply')}
+          resetLabel={t('sendAnother')}
+          onReset={resetForm}
         />
-        <p role="status" aria-live="polite" className="text-sm text-muted">
-          {result?.message}
-          {result && !result.success && whatsappUrl ? (
-            <>
-              {' '}
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-ink underline underline-offset-4"
-              >
-                {t('whatsappAlt')}
-              </a>
-            </>
-          ) : null}
-        </p>
-      </div>
+      ) : (
+        <div className="flex flex-wrap items-center gap-5">
+          <SubmitButton
+            status={status}
+            labels={{
+              idle: t('submit'),
+              loading: t('sending'),
+              success: t('sent'),
+              error: t('retry'),
+            }}
+          />
+          <p role="status" aria-live="polite" className="text-sm text-muted">
+            {result?.message}
+            {result && !result.success && whatsappUrl ? (
+              <>
+                {' '}
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ink underline underline-offset-4"
+                >
+                  {t('whatsappAlt')}
+                </a>
+              </>
+            ) : null}
+          </p>
+        </div>
+      )}
     </form>
   );
 }

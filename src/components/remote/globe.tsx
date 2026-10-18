@@ -14,6 +14,11 @@ const ACCENT = '#3d7bff';
 // 0.25 grados por frame a 60 Hz, expresado por milisegundo
 const ROTATION_SPEED = 0.25 / (1000 / 60);
 const MAX_FRAME_DELTA = 100;
+// Movimiento minimo antes de iniciar el arrastre para no robar el scroll vertical
+const DRAG_THRESHOLD = 8;
+const KEY_ROTATION_STEP = 10;
+const ZOOM_IN_FACTOR = 1.1;
+const ZOOM_OUT_FACTOR = 0.9;
 
 interface GlobeColors {
   page: string;
@@ -30,6 +35,8 @@ const readColors = (): GlobeColors => ({
 interface GlobeProps {
   hint: string;
   errorMessage: string;
+  label: string;
+  retryLabel: string;
 }
 
 const fetchJson = async <T,>(url: string, signal: AbortSignal): Promise<T> => {
@@ -38,10 +45,11 @@ const fetchJson = async <T,>(url: string, signal: AbortSignal): Promise<T> => {
   return (await response.json()) as T;
 };
 
-export function Globe({ hint, errorMessage }: GlobeProps) {
+export function Globe({ hint, errorMessage, label, retryLabel }: GlobeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -175,19 +183,38 @@ export function Globe({ hint, errorMessage }: GlobeProps) {
     );
     const resize = new ResizeObserver(layout);
 
+    const applyZoom = (factor: number): void => {
+      projection.scale(Math.max(radius * 0.5, Math.min(radius * 3, projection.scale() * factor)));
+      render();
+    };
+
     const handlePointerDown = (event: PointerEvent): void => {
       dragCleanup?.();
-      autoRotate = false;
-      canvas.setPointerCapture(event.pointerId);
       const origin = { x: event.clientX, y: event.clientY };
       const startRotation: [number, number] = [rotation[0], rotation[1]];
+      const { pointerId, pointerType } = event;
+      let dragging = false;
+
+      const beginDrag = (): void => {
+        dragging = true;
+        autoRotate = false;
+        canvas.setPointerCapture(pointerId);
+      };
 
       const handleMove = (move: PointerEvent): void => {
-        rotation[0] = startRotation[0] + (move.clientX - origin.x) * 0.5;
-        rotation[1] = Math.max(
-          -90,
-          Math.min(90, startRotation[1] - (move.clientY - origin.y) * 0.5),
-        );
+        const dx = move.clientX - origin.x;
+        const dy = move.clientY - origin.y;
+        if (!dragging) {
+          if (Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+          // En tactil un gesto mas vertical que horizontal es scroll de la pagina
+          if (pointerType === 'touch' && Math.abs(dy) > Math.abs(dx)) {
+            removeListeners();
+            return;
+          }
+          beginDrag();
+        }
+        rotation[0] = startRotation[0] + dx * 0.5;
+        rotation[1] = Math.max(-90, Math.min(90, startRotation[1] - dy * 0.5));
         projection.rotate(rotation);
         render();
       };
@@ -199,7 +226,7 @@ export function Globe({ hint, errorMessage }: GlobeProps) {
       };
       const handleUp = (): void => {
         removeListeners();
-        if (!reducedMotion) autoRotate = true;
+        if (dragging && !reducedMotion) autoRotate = true;
       };
 
       canvas.addEventListener('pointermove', handleMove);
@@ -208,11 +235,41 @@ export function Globe({ hint, errorMessage }: GlobeProps) {
       dragCleanup = removeListeners;
     };
 
+    // Solo con Ctrl/Cmd (o pellizco del trackpad) se hace zoom; si no, la pagina sigue haciendo scroll
     const handleWheel = (event: WheelEvent): void => {
+      if (!event.ctrlKey && !event.metaKey) return;
       event.preventDefault();
-      const factor = event.deltaY > 0 ? 0.9 : 1.1;
-      projection.scale(Math.max(radius * 0.5, Math.min(radius * 3, projection.scale() * factor)));
-      render();
+      applyZoom(event.deltaY > 0 ? ZOOM_OUT_FACTOR : ZOOM_IN_FACTOR);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      const rotations: Record<string, [number, number]> = {
+        ArrowLeft: [-KEY_ROTATION_STEP, 0],
+        ArrowRight: [KEY_ROTATION_STEP, 0],
+        ArrowUp: [0, KEY_ROTATION_STEP],
+        ArrowDown: [0, -KEY_ROTATION_STEP],
+      };
+      const delta = rotations[event.key];
+      if (delta) {
+        event.preventDefault();
+        autoRotate = false;
+        rotation[0] += delta[0];
+        rotation[1] = Math.max(-90, Math.min(90, rotation[1] + delta[1]));
+        projection.rotate(rotation);
+        render();
+        return;
+      }
+      if (event.key === '+' || event.key === '=') {
+        event.preventDefault();
+        applyZoom(ZOOM_IN_FACTOR);
+      } else if (event.key === '-' || event.key === '_') {
+        event.preventDefault();
+        applyZoom(ZOOM_OUT_FACTOR);
+      }
+    };
+
+    const handleBlur = (): void => {
+      if (!reducedMotion) autoRotate = true;
     };
 
     const handleTheme = (): void => {
@@ -244,6 +301,8 @@ export function Globe({ hint, errorMessage }: GlobeProps) {
 
     canvas.addEventListener('pointerdown', handlePointerDown);
     canvas.addEventListener('wheel', handleWheel, { passive: false });
+    canvas.addEventListener('keydown', handleKeyDown);
+    canvas.addEventListener('blur', handleBlur);
     window.addEventListener(THEME_EVENT, handleTheme);
     window.addEventListener('resize', layout);
     resize.observe(container);
@@ -259,15 +318,33 @@ export function Globe({ hint, errorMessage }: GlobeProps) {
       resize.disconnect();
       canvas.removeEventListener('pointerdown', handlePointerDown);
       canvas.removeEventListener('wheel', handleWheel);
+      canvas.removeEventListener('keydown', handleKeyDown);
+      canvas.removeEventListener('blur', handleBlur);
       window.removeEventListener(THEME_EVENT, handleTheme);
       window.removeEventListener('resize', layout);
     };
-  }, []);
+  }, [attempt]);
+
+  const retry = (): void => {
+    setStatus('loading');
+    setAttempt((value) => value + 1);
+  };
 
   if (status === 'error') {
     return (
       <div className="grid aspect-square place-items-center rounded-2xl bg-surface p-8">
-        <p className="text-center text-sm text-muted">{errorMessage}</p>
+        <div className="flex flex-col items-center gap-4">
+          <p role="alert" className="text-center text-sm text-muted">
+            {errorMessage}
+          </p>
+          <button
+            type="button"
+            onClick={retry}
+            className="inline-flex h-11 items-center rounded-full px-6 text-sm font-medium text-ink glass"
+          >
+            {retryLabel}
+          </button>
+        </div>
       </div>
     );
   }
@@ -281,9 +358,10 @@ export function Globe({ hint, errorMessage }: GlobeProps) {
       ) : null}
       <canvas
         ref={canvasRef}
-        data-lenis-prevent=""
-        aria-hidden
-        className="block h-full w-full cursor-grab touch-none active:cursor-grabbing"
+        role="img"
+        aria-label={label}
+        tabIndex={0}
+        className="block h-full w-full cursor-grab touch-pan-y rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent active:cursor-grabbing"
       />
       <p className="absolute bottom-4 left-4 rounded-full px-3 py-1.5 text-xs text-muted glass">
         {hint}

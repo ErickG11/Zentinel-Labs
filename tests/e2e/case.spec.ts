@@ -56,3 +56,18 @@ test('projects list shows both statuses', async ({ page }) => {
   await expect(work.getByText('En línea')).toBeVisible();
   await expect(work.getByText('En desarrollo')).toBeVisible();
 });
+
+test('case page closes with a contact call to action linking to the home form', async ({
+  page,
+}) => {
+  await page.goto('/es/proyectos/gas-solutions');
+  const cta = page.getByRole('link', { name: 'Cotizar mi proyecto' });
+  await expect(cta).toHaveAttribute('href', '/es#contact');
+  await expect(page.getByRole('heading', { name: '¿Tienes un proyecto similar?' })).toBeVisible();
+
+  await page.goto('/en/work/gas-solutions');
+  await expect(page.getByRole('link', { name: 'Get a quote' }).last()).toHaveAttribute(
+    'href',
+    '/en#contact',
+  );
+});

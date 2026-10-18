@@ -143,12 +143,20 @@
 }
 
 /* Texto que SplitText va a animar: oculto hasta que se divide (solo si hay movimiento) */
-html[data-motion='ok']:not([data-failsafe]) [data-split-pending] {
+html[data-motion='ok']:not([data-failsafe]) [data-split-pending],
+html[data-motion='ok'][data-hydrated] [data-split-pending] {
   visibility: hidden;
 }
 
+/* Reveal: sin JS, con reduced motion o si la app nunca montó, el contenido queda visible */
+html:not([data-motion='ok']) [data-reveal],
+html[data-failsafe]:not([data-hydrated]) [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 /* Fail-safe: si el JS de la app no limpia el estado a tiempo, el preloader se oculta */
-html[data-failsafe] [data-preloader] {
+html[data-failsafe]:not([data-hydrated]) [data-preloader] {
   display: none;
 }
 

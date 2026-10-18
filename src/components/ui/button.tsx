@@ -11,6 +11,7 @@ type HrefKind = 'anchor' | 'internal' | 'external';
 
 export const classifyHref = (href: string): HrefKind => {
   if (href.startsWith('#')) return 'anchor';
+  if (href.startsWith('//')) return 'external';
   if (href.startsWith('/')) return 'internal';
   return 'external';
 };
@@ -32,12 +33,12 @@ const VARIANTS = {
   primary: {
     base: 'bg-ink text-page border-ink',
     fill: 'bg-page',
-    hoverText: 'group-hover:text-ink',
+    hoverText: 'group-hover:text-ink group-focus-visible:text-ink',
   },
   secondary: {
     base: 'glass text-ink',
     fill: 'bg-ink',
-    hoverText: 'group-hover:text-page',
+    hoverText: 'group-hover:text-page group-focus-visible:text-page',
   },
 } as const;
 
@@ -71,7 +72,7 @@ export function Button({
       <span
         aria-hidden
         className={cn(
-          'absolute inset-0 translate-y-full rounded-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0',
+          'absolute inset-0 translate-y-full rounded-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-focus-visible:translate-y-0 motion-reduce:transition-none',
           styles.fill,
         )}
       />
@@ -82,7 +83,7 @@ export function Button({
         )}
       >
         <RollText>{children}</RollText>
-        {icon}
+        {icon ? <span aria-hidden>{icon}</span> : null}
       </span>
     </>
   );
@@ -109,6 +110,9 @@ export function Button({
 
   if (kind === 'anchor') {
     const handleClick = (event: MouseEvent<HTMLAnchorElement>): void => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+        return;
+      }
       event.preventDefault();
       scrollTo(href);
       onClick?.();
@@ -129,6 +133,16 @@ export function Button({
         <NextLink href={href} onClick={onClick} className={classes} {...cursorProps}>
           {content}
         </NextLink>
+      </Magnetic>
+    );
+  }
+
+  if (/^(mailto|tel):/i.test(href)) {
+    return (
+      <Magnetic>
+        <a href={href} onClick={onClick} className={classes} {...cursorProps}>
+          {content}
+        </a>
       </Magnetic>
     );
   }

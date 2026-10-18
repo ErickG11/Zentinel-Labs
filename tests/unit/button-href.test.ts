@@ -15,4 +15,17 @@ describe('classifyHref', () => {
     expect(classifyHref('mailto:hola@example.com')).toBe('external');
     expect(classifyHref('tel:+593000000000')).toBe('external');
   });
+
+  it('treats protocol-relative URLs as external', () => {
+    expect(classifyHref('//host.com')).toBe('external');
+  });
+
+  it('treats the empty string as external (documented fallback)', () => {
+    expect(classifyHref('')).toBe('external');
+  });
+
+  it('classifies #a as anchor and /x as internal', () => {
+    expect(classifyHref('#a')).toBe('anchor');
+    expect(classifyHref('/x')).toBe('internal');
+  });
 });

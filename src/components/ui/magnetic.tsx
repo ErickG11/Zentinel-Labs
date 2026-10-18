@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useMotionValue, useSpring } from 'motion/react';
-import type { PointerEvent, ReactNode } from 'react';
+import { useEffect, type PointerEvent, type ReactNode } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { FINE_POINTER_QUERY, REDUCED_MOTION_QUERY } from '@/lib/motion';
 
@@ -19,6 +19,13 @@ export function Magnetic({ children, strength = 0.35, className }: MagneticProps
   const x = useSpring(useMotionValue(0), SPRING);
   const y = useSpring(useMotionValue(0), SPRING);
   const enabled = finePointer && !reducedMotion;
+
+  useEffect(() => {
+    if (!enabled) {
+      x.set(0);
+      y.set(0);
+    }
+  }, [enabled, x, y]);
 
   const handlePointerMove = (event: PointerEvent<HTMLSpanElement>): void => {
     if (!enabled) return;

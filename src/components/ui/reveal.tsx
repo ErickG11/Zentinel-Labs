@@ -32,6 +32,7 @@ export function Reveal({
   if (trigger === 'intro') {
     return (
       <Tag
+        data-reveal=""
         className={className}
         variants={variants}
         initial="hidden"
@@ -45,6 +46,7 @@ export function Reveal({
 
   return (
     <Tag
+      data-reveal=""
       className={className}
       variants={variants}
       initial="hidden"

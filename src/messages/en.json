@@ -136,7 +136,11 @@
     "view": "View",
     "ctaTitle": "Is your project next?",
     "ctaText": "Tell us your idea and we will reply with a tailored proposal.",
-    "ctaButton": "Start now"
+    "ctaButton": "Start now",
+    "status": {
+      "live": "Live",
+      "inDevelopment": "In development"
+    }
   },
   "Case": {
     "back": "Back to work",
@@ -149,6 +153,11 @@
     "result": "The result",
     "visit": "Visit site",
     "next": "Next project",
-    "metaTitle": "{name} — Case study | Zentinel Labs"
+    "metaTitle": "{name} — Case study | Zentinel Labs",
+    "status": {
+      "live": "Live",
+      "inDevelopment": "In development"
+    },
+    "inDevelopmentNote": "This project is under development. The site will be published soon."
   }
 }

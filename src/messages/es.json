@@ -136,7 +136,11 @@
     "view": "Ver",
     "ctaTitle": "¿Tu proyecto es el siguiente?",
     "ctaText": "Cuéntanos tu idea y te respondemos con una propuesta a medida.",
-    "ctaButton": "Empezar ahora"
+    "ctaButton": "Empezar ahora",
+    "status": {
+      "live": "En línea",
+      "inDevelopment": "En desarrollo"
+    }
   },
   "Case": {
     "back": "Volver a proyectos",
@@ -149,6 +153,11 @@
     "result": "El resultado",
     "visit": "Visitar sitio",
     "next": "Siguiente proyecto",
-    "metaTitle": "{name} — Caso de estudio | Zentinel Labs"
+    "metaTitle": "{name} — Caso de estudio | Zentinel Labs",
+    "status": {
+      "live": "En línea",
+      "inDevelopment": "En desarrollo"
+    },
+    "inDevelopmentNote": "Este proyecto está en desarrollo. Pronto publicaremos el sitio."
   }
 }

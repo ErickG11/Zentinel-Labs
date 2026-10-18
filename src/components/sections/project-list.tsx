@@ -5,7 +5,8 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from 'motion/react
 import Image from 'next/image';
 import { useState, type PointerEvent } from 'react';
 import { TransitionLink } from '@/components/providers/page-transition-provider';
-import type { Project } from '@/content/projects';
+import { StatusBadge } from '@/components/ui/status-badge';
+import type { Project, ProjectStatus } from '@/content/projects';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { EASE_OUT_EXPO, FINE_POINTER_QUERY, REDUCED_MOTION_QUERY } from '@/lib/motion';
 
@@ -17,9 +18,10 @@ export interface ProjectListItem {
 interface ProjectListProps {
   items: ProjectListItem[];
   viewLabel: string;
+  statusLabels: Record<ProjectStatus, string>;
 }
 
-export function ProjectList({ items, viewLabel }: ProjectListProps) {
+export function ProjectList({ items, viewLabel, statusLabels }: ProjectListProps) {
   const finePointer = useMediaQuery(FINE_POINTER_QUERY);
   const reduceMotion = useMediaQuery(REDUCED_MOTION_QUERY);
   const [active, setActive] = useState<string | null>(null);
@@ -80,7 +82,12 @@ export function ProjectList({ items, viewLabel }: ProjectListProps) {
                 </span>
               </span>
               <span className="flex items-center gap-4 font-mono text-xs tracking-widest text-muted uppercase">
-                {project.category} · {project.year}
+                <span className="flex flex-col items-start gap-3 md:items-end">
+                  <span>
+                    {project.category} · {project.year}
+                  </span>
+                  <StatusBadge status={project.status} label={statusLabels[project.status]} />
+                </span>
                 <span className="grid h-11 w-11 place-items-center rounded-full text-ink glass">
                   <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:rotate-45" />
                 </span>
@@ -94,7 +101,7 @@ export function ProjectList({ items, viewLabel }: ProjectListProps) {
         <motion.div
           aria-hidden
           className="pointer-events-none fixed top-0 left-0 z-30 hidden md:block"
-          style={{ x, y, translateX: '-50%', translateY: '-50%' }}
+          style={{ x, y, translateX: '6%', translateY: '-70%' }}
         >
           <AnimatePresence mode="popLayout">
             {activeProject ? (

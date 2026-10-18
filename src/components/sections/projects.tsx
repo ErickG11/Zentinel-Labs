@@ -28,7 +28,11 @@ export async function Projects() {
           title={t('title')}
           description={t('description')}
         />
-        <ProjectList items={items} viewLabel={t('view')} />
+        <ProjectList
+          items={items}
+          viewLabel={t('view')}
+          statusLabels={{ live: t('status.live'), 'in-development': t('status.inDevelopment') }}
+        />
         <Reveal delay={0.1}>
           <div className="mt-12 flex flex-col items-start gap-6 rounded-3xl border border-dashed border-border p-8 transition-colors duration-500 hover:bg-ink/5 sm:flex-row sm:items-center sm:justify-between sm:p-10">
             <div className="flex flex-col gap-2">

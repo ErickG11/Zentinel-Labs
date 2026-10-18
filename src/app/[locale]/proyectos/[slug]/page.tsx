@@ -10,6 +10,7 @@ import { SectionLink } from '@/components/layout/section-link';
 import { Button } from '@/components/ui/button';
 import { Eyebrow } from '@/components/ui/eyebrow';
 import { Reveal } from '@/components/ui/reveal';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { SplitReveal } from '@/components/ui/split-reveal';
 import { getNextProject, getProjectBySlug, getProjectPath } from '@/content/projects';
 import { routing } from '@/i18n/routing';
@@ -62,7 +63,13 @@ export default async function CasePage({ params }: CasePageProps) {
             </SectionLink>
           </Reveal>
           <Reveal trigger="intro" y={12} delay={0.05}>
-            <Eyebrow>{project.category}</Eyebrow>
+            <div className="flex flex-wrap items-center gap-4">
+              <Eyebrow>{project.category}</Eyebrow>
+              <StatusBadge
+                status={project.status}
+                label={project.status === 'live' ? t('status.live') : t('status.inDevelopment')}
+              />
+            </div>
           </Reveal>
           <SplitReveal
             as="h1"
@@ -101,11 +108,16 @@ export default async function CasePage({ params }: CasePageProps) {
           ))}
         </div>
 
-        {project.url ? (
+        {project.status === 'live' && project.url ? (
           <Reveal>
             <Button href={project.url} size="lg" icon={<ArrowUpRight className="h-4 w-4" />}>
               {t('visit')}
             </Button>
+          </Reveal>
+        ) : null}
+        {project.status === 'in-development' ? (
+          <Reveal>
+            <p className="max-w-2xl text-lg text-pretty text-muted">{t('inDevelopmentNote')}</p>
           </Reveal>
         ) : null}
 

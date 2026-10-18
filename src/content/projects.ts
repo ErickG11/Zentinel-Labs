@@ -3,6 +3,8 @@ import { pickLocale, type Localized } from './types';
 
 export type ProjectSlug = 'pan-de-vida' | 'gas-solutions';
 
+export type ProjectStatus = 'live' | 'in-development';
+
 export interface ProjectImage {
   src: string;
   width: number;
@@ -12,6 +14,7 @@ export interface ProjectImage {
 
 interface ProjectBase {
   slug: ProjectSlug;
+  status: ProjectStatus;
   name: string;
   year: string;
   stack: string[];
@@ -47,6 +50,7 @@ const SHOT_SIZE = { width: 1600, height: 1000 } as const;
 const BASES: readonly ProjectBase[] = [
   {
     slug: 'pan-de-vida',
+    status: 'in-development',
     name: 'Pan de Vida',
     // TODO(Erick): confirmar año
     year: '2026',
@@ -54,11 +58,11 @@ const BASES: readonly ProjectBase[] = [
   },
   {
     slug: 'gas-solutions',
+    status: 'live',
     name: 'Gas Solutions',
     // TODO(Erick): confirmar año
     year: '2026',
     stack: ['HTML5', 'CSS3', 'JavaScript'],
-    // TODO(Erick): confirmar que el dominio esté publicado
     url: 'https://gassolpro.com',
   },
 ];

@@ -1,6 +1,7 @@
 import { Hero } from '@/components/sections/hero';
 import { Manifesto } from '@/components/sections/manifesto';
 import { Process } from '@/components/sections/process';
+import { Remote } from '@/components/sections/remote';
 import { Services } from '@/components/sections/services';
 import { Stats } from '@/components/sections/stats';
 import { TechTicker } from '@/components/sections/tech-ticker';
@@ -14,6 +15,7 @@ export default function HomePage() {
       <Services />
       <Process />
       <Stats />
+      <Remote />
     </main>
   );
 }

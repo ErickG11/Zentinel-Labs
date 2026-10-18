@@ -128,5 +128,16 @@
       "EMAIL_FAILED": "We could not send your message. Try again or message us on WhatsApp.",
       "SERVICE_UNAVAILABLE": "The form is unavailable right now. Please message us on WhatsApp."
     }
+  },
+  "WhatsApp": {
+    "label": "Message us on WhatsApp",
+    "message": "Hi Zentinel Labs, I would like a quote for a project."
+  },
+  "Footer": {
+    "tagline": "Custom software development from Ecuador to the world.",
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "rights": "All rights reserved.",
+    "madeIn": "Handcrafted in Ecuador."
   }
 }

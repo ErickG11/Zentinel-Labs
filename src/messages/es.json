@@ -128,5 +128,16 @@
       "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
       "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
     }
+  },
+  "WhatsApp": {
+    "label": "Escríbenos por WhatsApp",
+    "message": "Hola Zentinel Labs, quiero cotizar un proyecto."
+  },
+  "Footer": {
+    "tagline": "Desarrollo de software a medida desde Ecuador para el mundo.",
+    "navigation": "Navegación",
+    "contact": "Contacto",
+    "rights": "Todos los derechos reservados.",
+    "madeIn": "Hecho con código a medida en Ecuador."
   }
 }

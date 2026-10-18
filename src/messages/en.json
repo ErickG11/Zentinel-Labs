@@ -128,5 +128,16 @@
       "EMAIL_FAILED": "We could not send your message. Try again or message us on WhatsApp.",
       "SERVICE_UNAVAILABLE": "The form is unavailable right now. Please message us on WhatsApp."
     }
+  },
+  "NotFound": {
+    "eyebrow": "// error 404",
+    "title": "This page does not exist",
+    "text": "The link may be broken or the page may have moved.",
+    "home": "Back to home"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "text": "An unexpected error occurred. You can try again.",
+    "retry": "Try again"
   }
 }

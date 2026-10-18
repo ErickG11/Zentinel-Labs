@@ -128,5 +128,16 @@
       "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
       "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
     }
+  },
+  "NotFound": {
+    "eyebrow": "// error 404",
+    "title": "Esta página no existe",
+    "text": "Puede que el enlace esté roto o que la página se haya movido.",
+    "home": "Volver al inicio"
+  },
+  "Error": {
+    "title": "Algo salió mal",
+    "text": "Ocurrió un error inesperado. Puedes intentarlo de nuevo.",
+    "retry": "Reintentar"
   }
 }

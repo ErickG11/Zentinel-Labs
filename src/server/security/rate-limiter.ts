@@ -61,7 +61,7 @@ export class InMemoryRateLimiter implements RateLimiter {
     };
   }
 
-  // Tope duro: elimina las claves m�s antiguas (orden de inserci�n del Map)
+  // Tope duro: elimina las claves más antiguas (orden de inserción del Map)
   private evictOldest(): void {
     while (this.hits.size >= MAX_KEYS) {
       const oldest = this.hits.keys().next();

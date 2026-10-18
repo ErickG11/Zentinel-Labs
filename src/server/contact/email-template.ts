@@ -15,7 +15,7 @@ export const escapeHtml = (value: string): string =>
 const singleLine = (value: string): string => value.replace(/[\r\n]+/g, ' ').trim();
 
 export const UNTRUSTED_BANNER =
-  'Contenido enviado desde un formulario p�blico. No hagas clic en enlaces ni abras adjuntos si no reconoces al remitente.';
+  'Contenido enviado desde un formulario público. No hagas clic en enlaces ni abras adjuntos si no reconoces al remitente.';
 
 interface RenderedEmail {
   subject: string;

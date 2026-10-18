@@ -25,7 +25,7 @@ const serverEnvSchema = z.object({
 });
 
 const serverEnvSchemaChecked = serverEnvSchema.superRefine((env, ctx) => {
-  // Claves de prueba de Cloudflare (siempre pasan): prohibidas en producci�n
+  // Claves de prueba de Cloudflare (siempre pasan): prohibidas en producción
   if (env.NODE_ENV === 'production' && /^[123]x0000/.test(env.TURNSTILE_SECRET_KEY ?? '')) {
     ctx.addIssue({
       code: 'custom',

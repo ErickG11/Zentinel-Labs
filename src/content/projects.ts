@@ -3,6 +3,8 @@ import { pickLocale, type Localized } from './types';
 
 export type ProjectSlug = 'pan-de-vida' | 'gas-solutions';
 
+export type ProjectStatus = 'live' | 'in-development';
+
 export interface ProjectImage {
   src: string;
   width: number;
@@ -12,6 +14,7 @@ export interface ProjectImage {
 
 interface ProjectBase {
   slug: ProjectSlug;
+  status: ProjectStatus;
   name: string;
   year: string;
   stack: string[];
@@ -47,16 +50,19 @@ const SHOT_SIZE = { width: 1600, height: 1000 } as const;
 const BASES: readonly ProjectBase[] = [
   {
     slug: 'pan-de-vida',
+    status: 'in-development',
     name: 'Pan de Vida',
+    // TODO(Erick): confirmar año
     year: '2026',
     stack: ['React 19', 'Vite', 'GSAP', 'CSS'],
   },
   {
     slug: 'gas-solutions',
+    status: 'live',
     name: 'Gas Solutions',
+    // TODO(Erick): confirmar año
     year: '2026',
     stack: ['HTML5', 'CSS3', 'JavaScript'],
-    // TODO(Erick): confirmar que el dominio esté publicado
     url: 'https://gassolpro.com',
   },
 ];
@@ -65,6 +71,7 @@ const BASES: readonly ProjectBase[] = [
 const COPY: Localized<Record<ProjectSlug, ProjectCopy>> = {
   es: {
     'pan-de-vida': {
+      // TODO(Erick): confirmar descripción del cliente
       client: 'Panadería de tradición lojana',
       category: 'Web corporativa',
       role: 'Diseño y desarrollo',
@@ -84,6 +91,7 @@ const COPY: Localized<Record<ProjectSlug, ProjectCopy>> = {
       ],
     },
     'gas-solutions': {
+      // TODO(Erick): confirmar descripción del cliente
       client: 'Distribuidor de equipos para estaciones de servicio',
       category: 'Web corporativa y catálogo',
       role: 'Diseño y desarrollo',
@@ -105,6 +113,7 @@ const COPY: Localized<Record<ProjectSlug, ProjectCopy>> = {
   },
   en: {
     'pan-de-vida': {
+      // TODO(Erick): confirmar descripción del cliente
       client: 'Traditional bakery from Loja, Ecuador',
       category: 'Corporate website',
       role: 'Design & development',
@@ -123,6 +132,7 @@ const COPY: Localized<Record<ProjectSlug, ProjectCopy>> = {
       ],
     },
     'gas-solutions': {
+      // TODO(Erick): confirmar descripción del cliente
       client: 'Fuel station equipment distributor',
       category: 'Corporate website & catalog',
       role: 'Design & development',
@@ -156,6 +166,7 @@ export const getProjects = (locale: Locale): Project[] => {
     const { coverAlt, galleryAlts, ...text } = copy[base.slug];
     return {
       ...base,
+      stack: [...base.stack],
       ...text,
       cover: image(base.slug, 'cover', coverAlt),
       gallery: galleryAlts.map((alt, index) => image(base.slug, `shot-${index + 1}`, alt)),

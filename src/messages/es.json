@@ -62,7 +62,8 @@
       "email": "Email",
       "company": "Empresa (opcional)",
       "message": "Cuéntanos sobre tu proyecto",
-      "projectType": "Tipo de proyecto"
+      "projectType": "Tipo de proyecto",
+      "budget": "Presupuesto estimado"
     },
     "projectTypes": {
       "landing": "Web / landing",
@@ -100,6 +101,9 @@
       },
       "captcha": {
         "required": "Completa la verificación de seguridad"
+      },
+      "budget": {
+        "required": "Elige un rango de presupuesto"
       }
     },
     "responses": {
@@ -109,6 +113,13 @@
       "CAPTCHA_FAILED": "No pudimos verificar que eres humano. Inténtalo de nuevo.",
       "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
       "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
+    },
+    "budgets": {
+      "lt-1000": "Menos de $1.000",
+      "1000-3000": "$1.000 – $3.000",
+      "3000-7000": "$3.000 – $7.000",
+      "gt-7000": "Más de $7.000",
+      "undecided": "Aún no lo sé"
     }
   },
   "NotFound": {
@@ -146,5 +157,36 @@
   "Faq": {
     "eyebrow": "// faq",
     "title": "Preguntas frecuentes"
+  },
+  "Projects": {
+    "eyebrow": "// proyectos",
+    "title": "Trabajo seleccionado",
+    "description": "Cada proyecto, construido desde cero para su negocio.",
+    "view": "Ver",
+    "ctaTitle": "¿Tu proyecto es el siguiente?",
+    "ctaText": "Cuéntanos tu idea y te respondemos con una propuesta a medida.",
+    "ctaButton": "Empezar ahora",
+    "status": {
+      "live": "En línea",
+      "inDevelopment": "En desarrollo"
+    }
+  },
+  "Case": {
+    "back": "Volver a proyectos",
+    "client": "Cliente",
+    "year": "Año",
+    "role": "Rol",
+    "stack": "Tecnologías",
+    "challenge": "El reto",
+    "solution": "La solución",
+    "result": "El resultado",
+    "visit": "Visitar sitio",
+    "next": "Siguiente proyecto",
+    "metaTitle": "{name} — Caso de estudio | Zentinel Labs",
+    "status": {
+      "live": "En línea",
+      "inDevelopment": "En desarrollo"
+    },
+    "inDevelopmentNote": "Este proyecto está en desarrollo. Pronto publicaremos el sitio."
   }
 }

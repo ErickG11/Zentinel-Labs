@@ -62,7 +62,8 @@
       "email": "Email",
       "company": "Company (optional)",
       "message": "Tell us about your project",
-      "projectType": "Project type"
+      "projectType": "Project type",
+      "budget": "Estimated budget"
     },
     "projectTypes": {
       "landing": "Website / landing",
@@ -100,6 +101,9 @@
       },
       "captcha": {
         "required": "Complete the security check"
+      },
+      "budget": {
+        "required": "Choose a budget range"
       }
     },
     "responses": {
@@ -109,6 +113,13 @@
       "CAPTCHA_FAILED": "We could not verify you are human. Please try again.",
       "EMAIL_FAILED": "We could not send your message. Try again or message us on WhatsApp.",
       "SERVICE_UNAVAILABLE": "The form is unavailable right now. Please message us on WhatsApp."
+    },
+    "budgets": {
+      "lt-1000": "Under $1,000",
+      "1000-3000": "$1,000 – $3,000",
+      "3000-7000": "$3,000 – $7,000",
+      "gt-7000": "Over $7,000",
+      "undecided": "Not sure yet"
     }
   },
   "NotFound": {
@@ -146,5 +157,36 @@
   "Faq": {
     "eyebrow": "// faq",
     "title": "Frequently asked questions"
+  },
+  "Projects": {
+    "eyebrow": "// work",
+    "title": "Selected work",
+    "description": "Every project, built from scratch for its business.",
+    "view": "View",
+    "ctaTitle": "Is your project next?",
+    "ctaText": "Tell us your idea and we will reply with a tailored proposal.",
+    "ctaButton": "Start now",
+    "status": {
+      "live": "Live",
+      "inDevelopment": "In development"
+    }
+  },
+  "Case": {
+    "back": "Back to work",
+    "client": "Client",
+    "year": "Year",
+    "role": "Role",
+    "stack": "Stack",
+    "challenge": "The challenge",
+    "solution": "The solution",
+    "result": "The result",
+    "visit": "Visit site",
+    "next": "Next project",
+    "metaTitle": "{name} — Case study | Zentinel Labs",
+    "status": {
+      "live": "Live",
+      "inDevelopment": "In development"
+    },
+    "inDevelopmentNote": "This project is under development. The site will be published soon."
   }
 }

@@ -32,4 +32,13 @@ describe('projects content', () => {
       }
     }
   });
+
+  it('marks pan-de-vida in development without url and gas-solutions live', () => {
+    const pan = getProjectBySlug('es', 'pan-de-vida');
+    const gas = getProjectBySlug('es', 'gas-solutions');
+    expect(pan?.status).toBe('in-development');
+    expect(pan?.url).toBeUndefined();
+    expect(gas?.status).toBe('live');
+    expect(gas?.url).toBe('https://gassolpro.com');
+  });
 });

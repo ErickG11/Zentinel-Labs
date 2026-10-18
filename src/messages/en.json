@@ -33,5 +33,31 @@
     "skip": "Skip to content",
     "language": "Change language",
     "home": "Zentinel Labs — home"
+  },
+  "Home": {
+    "eyebrow": "// zentinel-labs",
+    "title": "Custom software,",
+    "titleHighlight": "built to scale.",
+    "subtitle": "Corporate websites, web applications and e-commerce built with first-class technology.",
+    "status": "Site under construction"
+  },
+  "Manifesto": {
+    "eyebrow": "// manifesto",
+    "text": "A website is not a digital brochure: it is the tool that works for your business around the clock. That is why we write every line from scratch, care about every millisecond of load time and design every interaction so your customers trust you from the very first click."
+  },
+  "Services": {
+    "eyebrow": "// services",
+    "title": "What we build",
+    "description": "Three lines of work, one standard: performance, security and custom design."
+  },
+  "Process": {
+    "eyebrow": "// process",
+    "title": "How we work",
+    "description": "A clear process with visible deliveries and no surprises."
+  },
+  "Stats": {
+    "eyebrow": "// standards",
+    "title": "Quality you can measure",
+    "ringsTitle": "Minimum Lighthouse score on every delivery"
   }
 }

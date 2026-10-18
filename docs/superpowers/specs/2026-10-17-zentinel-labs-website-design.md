@@ -189,6 +189,16 @@ Cada sección: eyebrow mono → h2 display (SplitText reveal por líneas) → co
   6. FAQ + Contact (server action, Turnstile, rate limit) + Footer
   7. SEO + tests + auditoría Lighthouse
 
+### Pasada de diseño con skills (al cierre de cada fase con UI)
+
+Skills instaladas en `~/.claude/skills` (revisadas el 2026-10-17; commits: impeccable `08d5b47`, taste-skill `f624f37`, ui-ux-pro-max-skill `56ea9cf`):
+
+1. **ui-ux-pro-max** — antes de implementar una sección nueva: consultar estilo/tipografía/presets GSAP para el stack `nextjs` y validar contra sus reglas UX y de accesibilidad.
+2. **impeccable** — al terminar la fase: `audit` de las secciones nuevas (jerarquía, ritmo, tipografía, movimiento, a11y) y `polish` sobre lo que falle.
+3. **design-taste-frontend** (taste) — al terminar la fase: crítica de "tells" genéricos sobre capturas en desktop y móvil.
+
+**Regla de prioridad:** el spec aprobado manda. Si una skill propone cambiar algo que Erick eligió explícitamente (paleta B/N + azul, eyebrows mono `// sección`, glass, tipografías, animaciones del portfolio), se le presenta como propuesta con pros/contras y **no se aplica sin su aprobación**. Las mejoras que no contradicen el spec (espaciado, contraste, jerarquía, timing, estados) se aplican directamente.
+
 ## 14. Fuera de alcance (YAGNI)
 
 CMS, blog, panel admin, testimonios, sección de equipo, analytics (se puede añadir luego), apps móviles.

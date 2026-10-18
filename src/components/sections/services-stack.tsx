@@ -1,13 +1,13 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, type CSSProperties } from 'react';
 import type { Service } from '@/content/services';
 import { gsap, useGSAP } from '@/lib/gsap';
-import { MOTION_OK_QUERY } from '@/lib/motion';
 import { ServiceIllustration } from './service-illustrations';
 
 const STACK_TOP_REM = 7;
 const STACK_STEP_REM = 1.75;
+const STACK_MOTION_QUERY = '(min-width: 768px) and (prefers-reduced-motion: no-preference)';
 
 export function ServicesStack({ services }: { services: Service[] }) {
   const listRef = useRef<HTMLOListElement>(null);
@@ -18,7 +18,7 @@ export function ServicesStack({ services }: { services: Service[] }) {
       if (!list) return;
       const cards = gsap.utils.toArray<HTMLElement>('[data-service-card]', list);
       const mm = gsap.matchMedia();
-      mm.add(MOTION_OK_QUERY, () => {
+      mm.add(STACK_MOTION_QUERY, () => {
         cards.forEach((card, index) => {
           const next = cards[index + 1];
           if (!next) return;
@@ -44,14 +44,15 @@ export function ServicesStack({ services }: { services: Service[] }) {
       {services.map((service, index) => (
         <li
           key={service.id}
-          className="sticky"
-          style={{ top: `${STACK_TOP_REM + index * STACK_STEP_REM}rem` }}
+          className="md:sticky md:top-(--stack-top)"
+          style={{ '--stack-top': `${STACK_TOP_REM + index * STACK_STEP_REM}rem` } as CSSProperties}
         >
           <article
             data-service-card=""
-            className="grid origin-top gap-10 rounded-3xl bg-page/80 p-8 glass sm:p-12 md:grid-cols-[1.2fr_1fr] md:items-center"
+            className="relative grid origin-top gap-10 rounded-3xl bg-page p-8 sm:p-12 md:grid-cols-[1.2fr_1fr] md:items-center"
           >
-            <div className="flex flex-col gap-6">
+            <div aria-hidden className="pointer-events-none absolute inset-0 rounded-3xl glass" />
+            <div className="relative flex flex-col gap-6">
               <span className="font-mono text-sm text-muted">{service.number}</span>
               <h3 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
                 {service.title}
@@ -68,7 +69,7 @@ export function ServicesStack({ services }: { services: Service[] }) {
                 ))}
               </ul>
             </div>
-            <div className="flex justify-center md:justify-end">
+            <div className="relative flex justify-center md:justify-end">
               <ServiceIllustration id={service.id} />
             </div>
           </article>

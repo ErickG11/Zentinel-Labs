@@ -128,5 +128,27 @@
       "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
       "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
     }
+  },
+  "Projects": {
+    "eyebrow": "// proyectos",
+    "title": "Trabajo seleccionado",
+    "description": "Cada proyecto, construido desde cero para su negocio.",
+    "view": "Ver",
+    "ctaTitle": "¿Tu proyecto es el siguiente?",
+    "ctaText": "Cuéntanos tu idea y te respondemos con una propuesta a medida.",
+    "ctaButton": "Empezar ahora"
+  },
+  "Case": {
+    "back": "Volver a proyectos",
+    "client": "Cliente",
+    "year": "Año",
+    "role": "Rol",
+    "stack": "Tecnologías",
+    "challenge": "El reto",
+    "solution": "La solución",
+    "result": "El resultado",
+    "visit": "Visitar sitio",
+    "next": "Siguiente proyecto",
+    "metaTitle": "{name} — Caso de estudio | Zentinel Labs"
   }
 }

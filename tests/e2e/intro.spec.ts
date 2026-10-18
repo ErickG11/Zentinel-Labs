@@ -37,7 +37,7 @@ test.describe('custom cursor', () => {
 
     const ring = cursor.locator('> div').first();
     const before = await ring.boundingBox();
-    await page.getByRole('button', { name: 'Cambiar tema' }).hover();
+    await page.getByRole('button', { name: 'Cambiar a modo claro' }).hover();
     await expect
       .poll(async () => (await ring.boundingBox())?.width ?? 0, { timeout: 5000 })
       .toBeGreaterThanOrEqual(60);

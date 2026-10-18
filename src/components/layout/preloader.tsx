@@ -6,7 +6,21 @@ import { useSmoothScroll } from '@/components/providers/smooth-scroll-provider';
 import { gsap } from '@/lib/gsap';
 import { markIntroDone } from '@/lib/intro';
 
-const COUNT_DURATION = 1.6;
+// Duracion total aproximada: 1.1 + 0.25 + 0.7 = 2.05 s
+const COUNT_DURATION = 1.1;
+const FADE_DURATION = 0.25;
+const WIPE_DURATION = 0.7;
+// Mientras suena la intro el resto de la pagina no debe ser alcanzable con teclado
+const BACKGROUND_SELECTOR = 'main, footer, header, [data-skip-link]';
+
+const setBackgroundBlocked = (blocked: boolean): void => {
+  document.querySelectorAll<HTMLElement>(BACKGROUND_SELECTOR).forEach((element) => {
+    if (blocked) element.setAttribute('inert', '');
+    else element.removeAttribute('inert');
+  });
+  if (blocked) document.body.setAttribute('aria-busy', 'true');
+  else document.body.removeAttribute('aria-busy');
+};
 
 export function Preloader() {
   const t = useTranslations('Preloader');
@@ -30,9 +44,11 @@ export function Preloader() {
 
     const lock = scrollRef.current;
     lock.stop();
+    setBackgroundBlocked(true);
     const counter = { value: 0 };
     const timeline = gsap.timeline({
       onComplete: () => {
+        setBackgroundBlocked(false);
         lock.start();
         markIntroDone();
       },
@@ -44,11 +60,12 @@ export function Preloader() {
         ease: 'power3.inOut',
         onUpdate: () => setCount(Math.round(counter.value)),
       })
-      .to(root.querySelectorAll('[data-preloader-fade]'), { opacity: 0, duration: 0.3 })
-      .to(root, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.9, ease: 'expo.inOut' });
+      .to(root.querySelectorAll('[data-preloader-fade]'), { opacity: 0, duration: FADE_DURATION })
+      .to(root, { clipPath: 'inset(0% 0% 100% 0%)', duration: WIPE_DURATION, ease: 'expo.inOut' });
 
     return () => {
       timeline.kill();
+      setBackgroundBlocked(false);
       lock.start();
     };
   }, []);

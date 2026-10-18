@@ -83,7 +83,7 @@ const COPY: Localized<Record<ProjectSlug, ProjectCopy>> = {
         'Diseño oscuro y cálido con una animación de scroll construida con GSAP, catálogo de productos, sección de reseñas, mapa de ubicación y contacto directo.',
       result:
         'Una web rápida y adaptable que presenta la marca y su catálogo en cualquier dispositivo.',
-      coverAlt: 'Portada del sitio de Pan de Vida con su pan lojano protagonista',
+      coverAlt: 'Catálogo de productos del sitio de Pan de Vida con sus panes artesanales',
       galleryAlts: [
         'Sección de historia y cifras de la panadería',
         'Catálogo de productos de Pan de Vida',
@@ -124,7 +124,7 @@ const COPY: Localized<Record<ProjectSlug, ProjectCopy>> = {
       solution:
         'A dark, warm design with a GSAP-powered scroll animation, product catalog, reviews section, location map and direct contact.',
       result: 'A fast, responsive website that presents the brand and its catalog on any device.',
-      coverAlt: 'Pan de Vida website hero featuring its signature bread',
+      coverAlt: 'Pan de Vida website product catalog showing its artisan breads',
       galleryAlts: [
         'Bakery story and figures section',
         'Pan de Vida product catalog',

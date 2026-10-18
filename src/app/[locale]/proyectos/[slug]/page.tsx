@@ -119,12 +119,25 @@ export default async function CasePage({ params }: CasePageProps) {
         </Reveal>
 
         <div className="grid gap-14 lg:grid-cols-3">
-          {story.map((block, index) => (
-            <Reveal key={block.title} delay={index * 0.1} className="flex flex-col gap-4">
-              <h2 className="font-display text-2xl font-semibold tracking-tight">{block.title}</h2>
-              <p className="text-pretty text-muted">{block.text}</p>
-            </Reveal>
-          ))}
+          {story.map((block, index) => {
+            const isResult = index === story.length - 1;
+            return (
+              <Reveal key={block.title} delay={index * 0.1} className="flex flex-col gap-4">
+                <h2 className="font-display text-2xl font-semibold tracking-tight">
+                  {block.title}
+                </h2>
+                <p
+                  className={
+                    isResult
+                      ? 'font-display text-2xl leading-snug font-medium text-pretty text-ink'
+                      : 'text-pretty text-muted'
+                  }
+                >
+                  {block.text}
+                </p>
+              </Reveal>
+            );
+          })}
         </div>
 
         {project.status === 'live' && project.url ? (

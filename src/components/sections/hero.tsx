@@ -41,15 +41,21 @@ export async function Hero() {
           </Reveal>
 
           <Reveal trigger="intro" delay={0.6}>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:flex sm:flex-wrap sm:items-center">
               <Button
                 href={`#${SECTION_IDS.contact}`}
                 size="lg"
+                className="w-full sm:w-auto"
                 icon={<ArrowDownRight className="h-4 w-4" />}
               >
                 {t('primaryCta')}
               </Button>
-              <Button href={`#${SECTION_IDS.work}`} size="lg" variant="secondary">
+              <Button
+                href={`#${SECTION_IDS.work}`}
+                size="lg"
+                variant="secondary"
+                className="w-full sm:w-auto"
+              >
                 {t('secondaryCta')}
               </Button>
             </div>

@@ -32,8 +32,11 @@ export const contactSchema = z.object({
     .trim()
     .min(20, 'message.min')
     .max(2000, 'message.max'),
-  turnstileToken: z.string({ error: 'captcha.required' }).min(1, 'captcha.required'),
-  website: z.string({ error: 'website.invalid' }).optional(),
+  turnstileToken: z
+    .string({ error: 'captcha.required' })
+    .min(1, 'captcha.required')
+    .max(2048, 'captcha.required'),
+  website: z.string({ error: 'website.invalid' }).max(200, 'website.invalid').optional(),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;

@@ -7,20 +7,35 @@ interface VerifyOptions {
   token: string;
   secret: string;
   remoteIp?: string;
+  // Si se indica, el hostname de la respuesta debe coincidir (o su variante www.)
+  expectedHostname?: string;
   fetchImpl?: typeof fetch;
 }
 
 interface SiteVerifyResponse {
   success?: unknown;
+  hostname?: unknown;
 }
+
+const hostnameMatches = (actual: unknown, expected: string): boolean => {
+  if (typeof actual !== 'string') return false;
+  const bare = expected.toLowerCase().replace(/^www\./, '');
+  const received = actual.toLowerCase();
+  return received === bare || received === `www.${bare}`;
+};
 
 export const verifyTurnstileToken = async ({
   token,
   secret,
   remoteIp,
+  expectedHostname,
   fetchImpl = fetch,
 }: VerifyOptions): Promise<boolean> => {
-  const body = new URLSearchParams({ secret, response: token });
+  const body = new URLSearchParams({
+    secret,
+    response: token,
+    idempotency_key: crypto.randomUUID(),
+  });
   if (remoteIp && remoteIp !== 'unknown') body.set('remoteip', remoteIp);
 
   try {
@@ -32,7 +47,9 @@ export const verifyTurnstileToken = async ({
     });
     if (!response.ok) return false;
     const data = (await response.json()) as SiteVerifyResponse;
-    return data.success === true;
+    if (data.success !== true) return false;
+    if (expectedHostname === undefined) return true;
+    return hostnameMatches(data.hostname, expectedHostname);
   } catch {
     return false;
   }

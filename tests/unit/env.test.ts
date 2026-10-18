@@ -17,6 +17,13 @@ describe('parseServerEnv', () => {
     expect(env.RESEND_API_KEY).toBeUndefined();
   });
 
+  it('defaults TRUSTED_PROXY to none and validates its values', () => {
+    expect(parseServerEnv({}).TRUSTED_PROXY).toBe('none');
+    expect(parseServerEnv({ TRUSTED_PROXY: '' }).TRUSTED_PROXY).toBe('none');
+    expect(parseServerEnv({ TRUSTED_PROXY: 'cloudflare' }).TRUSTED_PROXY).toBe('cloudflare');
+    expect(() => parseServerEnv({ TRUSTED_PROXY: 'nginx' })).toThrow();
+  });
+
   it('treats empty strings as missing', () => {
     expect(parseServerEnv({ CONTACT_TO_EMAIL: '' }).CONTACT_TO_EMAIL).toBeUndefined();
   });

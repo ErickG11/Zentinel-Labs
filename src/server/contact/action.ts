@@ -5,7 +5,7 @@ import { hasLocale } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { fail, ok, type ApiResponse } from '@/lib/api-response';
-import { getContactConfig, getServerEnv } from '@/server/env';
+import { getContactConfig, getServerEnv, type ServerEnv } from '@/server/env';
 import { logger } from '@/server/logger';
 import { getClientIp } from '@/server/security/client-ip';
 import { createContactRateLimiter, type RateLimiter } from '@/server/security/rate-limiter';
@@ -19,6 +19,10 @@ const getRateLimiter = (): RateLimiter => {
   return rateLimiter;
 };
 
+// Fuera de producción las claves de prueba de Cloudflare devuelven un hostname ficticio
+const expectedTurnstileHostname = (env: ServerEnv): string | undefined =>
+  env.NODE_ENV === 'production' ? new URL(env.NEXT_PUBLIC_SITE_URL).hostname : undefined;
+
 const FALLBACK_UNAVAILABLE = 'El formulario no está disponible en este momento.';
 
 export async function submitContact(
@@ -29,17 +33,23 @@ export async function submitContact(
     const safeLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
     const t = await getTranslations({ locale: safeLocale, namespace: 'Contact.responses' });
 
-    const config = getContactConfig(getServerEnv());
+    const env = getServerEnv();
+    const config = getContactConfig(env);
     if (!config) {
       logger.warn('contact.not_configured');
       return fail('SERVICE_UNAVAILABLE', t('SERVICE_UNAVAILABLE'));
     }
 
-    const ip = getClientIp(await headers());
+    const ip = getClientIp(await headers(), env.TRUSTED_PROXY);
     const outcome = await handleContactSubmission(input, ip, {
       rateLimiter: getRateLimiter(),
       verifyCaptcha: (token, remoteIp) =>
-        verifyTurnstileToken({ token, remoteIp, secret: config.turnstileSecret }),
+        verifyTurnstileToken({
+          token,
+          remoteIp,
+          secret: config.turnstileSecret,
+          expectedHostname: expectedTurnstileHostname(env),
+        }),
       sendEmail: createResendSender(config),
       logger,
     });

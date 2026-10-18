@@ -120,7 +120,8 @@ describe('renderContactEmail hardening', () => {
       company: 'ACME\nTipo de proyecto: other',
     });
     const lines = text.split('\n');
-    expect(lines[0]).toBe('Nombre: Eve Email: boss@corp.com');
+    // Las dos primeras líneas son el banner de contenido no confiable y una línea en blanco
+    expect(lines[2]).toBe('Nombre: Eve Email: boss@corp.com');
     expect(lines.filter((line) => line.startsWith('Email:'))).toHaveLength(1);
     expect(lines.filter((line) => line.startsWith('Tipo de proyecto:'))).toHaveLength(1);
   });

@@ -50,4 +50,45 @@ describe('verifyTurnstileToken', () => {
       timeoutSpy.mockRestore();
     }
   });
+
+  it('sends a fresh idempotency_key per verification', async () => {
+    const fetchImpl = vi.fn().mockImplementation(async () => jsonResponse({ success: true }));
+    await verifyTurnstileToken({ token: 't', secret: 's', fetchImpl });
+    await verifyTurnstileToken({ token: 't', secret: 's', fetchImpl });
+    const keys = fetchImpl.mock.calls.map((call) =>
+      (call[1].body as URLSearchParams).get('idempotency_key'),
+    );
+    expect(keys[0]).toMatch(/^[0-9a-f-]{36}$/);
+    expect(keys[0]).not.toBe(keys[1]);
+  });
+
+  describe('hostname check', () => {
+    const run = (hostname: unknown, expectedHostname?: string) =>
+      verifyTurnstileToken({
+        token: 't',
+        secret: 's',
+        expectedHostname,
+        fetchImpl: vi.fn().mockResolvedValue(jsonResponse({ success: true, hostname })),
+      });
+
+    it('accepts the expected hostname and its www variant', async () => {
+      await expect(run('zentinel.dev', 'zentinel.dev')).resolves.toBe(true);
+      await expect(run('www.zentinel.dev', 'zentinel.dev')).resolves.toBe(true);
+      await expect(run('zentinel.dev', 'www.zentinel.dev')).resolves.toBe(true);
+    });
+
+    it('rejects a mismatched hostname', async () => {
+      await expect(run('evil.example', 'zentinel.dev')).resolves.toBe(false);
+      await expect(run('sub.zentinel.dev', 'zentinel.dev')).resolves.toBe(false);
+    });
+
+    it('rejects a missing hostname when one is expected', async () => {
+      await expect(run(undefined, 'zentinel.dev')).resolves.toBe(false);
+    });
+
+    it('skips the check when no hostname is expected', async () => {
+      await expect(run('example.com')).resolves.toBe(true);
+      await expect(run(undefined)).resolves.toBe(true);
+    });
+  });
 });

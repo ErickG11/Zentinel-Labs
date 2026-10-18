@@ -1,5 +1,6 @@
 import 'server-only';
 import { z } from 'zod';
+import { TRUSTED_PROXY_MODES } from '@/server/security/client-ip';
 
 // Variables vacías en .env se tratan como ausentes
 const optional = <T extends z.ZodType>(schema: T) =>
@@ -10,6 +11,10 @@ const serverEnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.preprocess(
     (value) => (value === '' ? undefined : value),
     z.url().default('http://localhost:3000'),
+  ),
+  TRUSTED_PROXY: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.enum(TRUSTED_PROXY_MODES).default('none'),
   ),
   RESEND_API_KEY: optional(z.string().startsWith('re_')),
   CONTACT_TO_EMAIL: optional(z.email()),

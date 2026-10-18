@@ -7,13 +7,21 @@ import { cn } from '@/lib/utils';
 import { Magnetic } from './magnetic';
 import { RollText } from './roll-text';
 
-type HrefKind = 'anchor' | 'internal' | 'external';
+type HrefKind = 'anchor' | 'internal' | 'external' | 'unsafe';
 
+// Los navegadores ignoran espacios y caracteres de control al interpretar el esquema
+// (p. ej. "java\tscript:"), así que se eliminan antes de clasificar.
+const IGNORED_CHARS = /[\u0000- \u007f-\u009f]/g;
+const SAFE_SCHEME = /^(https?|mailto|tel):/i;
+
+// Solo se permiten #ancla, /ruta (no //host ni /\host), https:, http:, mailto: y tel:
 export const classifyHref = (href: string): HrefKind => {
-  if (href.startsWith('#')) return 'anchor';
-  if (href.startsWith('//')) return 'external';
-  if (href.startsWith('/')) return 'internal';
-  return 'external';
+  const cleaned = href.replace(IGNORED_CHARS, '');
+  if (cleaned.startsWith('#')) return 'anchor';
+  if (cleaned.startsWith('//') || cleaned.startsWith('/\\')) return 'unsafe';
+  if (cleaned.startsWith('/')) return 'internal';
+  if (SAFE_SCHEME.test(cleaned)) return 'external';
+  return 'unsafe';
 };
 
 interface ButtonProps {
@@ -107,6 +115,22 @@ export function Button({
   }
 
   const kind = classifyHref(href);
+
+  // Esquema no permitido (javascript:, data:, etc.): enlace inerte
+  if (kind === 'unsafe') {
+    return (
+      <Magnetic>
+        <a
+          href="#"
+          onClick={(event) => event.preventDefault()}
+          className={classes}
+          {...cursorProps}
+        >
+          {content}
+        </a>
+      </Magnetic>
+    );
+  }
 
   if (kind === 'anchor') {
     const handleClick = (event: MouseEvent<HTMLAnchorElement>): void => {

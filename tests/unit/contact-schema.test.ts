@@ -39,6 +39,14 @@ describe('contactSchema', () => {
     expect(messagesFor({ ...valid, turnstileToken: '' })).toContain('captcha.required');
   });
 
+  it('bounds the token and honeypot lengths', () => {
+    expect(messagesFor({ ...valid, turnstileToken: 'a'.repeat(2048) })).toEqual([]);
+    expect(messagesFor({ ...valid, turnstileToken: 'a'.repeat(2049) })).toContain(
+      'captcha.required',
+    );
+    expect(messagesFor({ ...valid, website: 'a'.repeat(201) })).toContain('website.invalid');
+  });
+
   it('caps the message length', () => {
     expect(messagesFor({ ...valid, message: 'a'.repeat(2001) })).toContain('message.max');
   });

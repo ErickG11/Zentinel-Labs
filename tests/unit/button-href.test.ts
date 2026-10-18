@@ -16,12 +16,34 @@ describe('classifyHref', () => {
     expect(classifyHref('tel:+593000000000')).toBe('external');
   });
 
-  it('treats protocol-relative URLs as external', () => {
-    expect(classifyHref('//host.com')).toBe('external');
+  it('accepts http and https', () => {
+    expect(classifyHref('http://example.com')).toBe('external');
+    expect(classifyHref('HTTPS://example.com')).toBe('external');
   });
 
-  it('treats the empty string as external (documented fallback)', () => {
-    expect(classifyHref('')).toBe('external');
+  it('rejects protocol-relative URLs', () => {
+    expect(classifyHref('//host.com')).toBe('unsafe');
+    expect(classifyHref('/\\host.com')).toBe('unsafe');
+    expect(classifyHref('/\t/host.com')).toBe('unsafe');
+  });
+
+  it('rejects dangerous schemes, including case, whitespace and control-char tricks', () => {
+    expect(classifyHref('javascript:alert(1)')).toBe('unsafe');
+    expect(classifyHref('JAVASCRIPT:alert(1)')).toBe('unsafe');
+    expect(classifyHref('JaVaScRiPt:alert(1)')).toBe('unsafe');
+    expect(classifyHref('  javascript:alert(1)')).toBe('unsafe');
+    expect(classifyHref('java\tscript:alert(1)')).toBe('unsafe');
+    expect(classifyHref('java\nscript:alert(1)')).toBe('unsafe');
+    expect(classifyHref('\u0001javascript:alert(1)')).toBe('unsafe');
+    expect(classifyHref('data:text/html,<script>alert(1)</script>')).toBe('unsafe');
+    expect(classifyHref('DATA:text/html;base64,AAAA')).toBe('unsafe');
+    expect(classifyHref('vbscript:x')).toBe('unsafe');
+    expect(classifyHref('ftp://example.com')).toBe('unsafe');
+  });
+
+  it('rejects the empty string and bare relative paths', () => {
+    expect(classifyHref('')).toBe('unsafe');
+    expect(classifyHref('foo/bar')).toBe('unsafe');
   });
 
   it('classifies #a as anchor and /x as internal', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { escapeHtml, renderContactEmail } from '@/server/contact/email-template';
+import { UNTRUSTED_BANNER, escapeHtml, renderContactEmail } from '@/server/contact/email-template';
 
 describe('escapeHtml', () => {
   it('neutralizes HTML special characters', () => {
@@ -27,5 +27,13 @@ describe('renderContactEmail', () => {
 
   it('strips line breaks from the subject to prevent header injection', () => {
     expect(renderContactEmail(input).subject).not.toMatch(/[\r\n]/);
+  });
+
+  it('puts the untrusted-content banner at the top of both parts', () => {
+    const { html, text } = renderContactEmail(input);
+    expect(UNTRUSTED_BANNER).toContain('No hagas clic en enlaces ni abras adjuntos');
+    expect(html.indexOf(UNTRUSTED_BANNER)).toBeGreaterThan(-1);
+    expect(html.indexOf(UNTRUSTED_BANNER)).toBeLessThan(html.indexOf('<h2>'));
+    expect(text.startsWith(`*** ${UNTRUSTED_BANNER}`)).toBe(true);
   });
 });

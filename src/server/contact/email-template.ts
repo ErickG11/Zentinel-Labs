@@ -14,6 +14,9 @@ export const escapeHtml = (value: string): string =>
 
 const singleLine = (value: string): string => value.replace(/[\r\n]+/g, ' ').trim();
 
+export const UNTRUSTED_BANNER =
+  'Contenido enviado desde un formulario p�blico. No hagas clic en enlaces ni abras adjuntos si no reconoces al remitente.';
+
 interface RenderedEmail {
   subject: string;
   html: string;
@@ -37,8 +40,10 @@ export const renderContactEmail = (input: ContactInput): RenderedEmail => {
 
   return {
     subject: `Nueva solicitud de proyecto — ${singleLine(input.name)}`,
-    html: `<div style="font-family:Arial,sans-serif;color:#0a0a0a"><h2>Nueva solicitud desde zentinel_labs.</h2><table>${htmlRows}</table><h3>Mensaje</h3><p style="white-space:pre-wrap">${escapeHtml(input.message)}</p></div>`,
+    html: `<div style="font-family:Arial,sans-serif;color:#0a0a0a"><p style="margin:0 0 16px;padding:10px 12px;background:#fff4cc;border:1px solid #e0b400;font-weight:bold">${UNTRUSTED_BANNER}</p><h2>Nueva solicitud desde zentinel_labs.</h2><table>${htmlRows}</table><h3>Mensaje</h3><p style="white-space:pre-wrap">${escapeHtml(input.message)}</p></div>`,
     text: [
+      `*** ${UNTRUSTED_BANNER} ***`,
+      '',
       ...rows.map(([label, value]) => `${label}: ${singleLine(value)}`),
       '',
       input.message,

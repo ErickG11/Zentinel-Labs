@@ -2,6 +2,7 @@ import 'server-only';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import type { ServerEnv } from '@/server/env';
+import { logger } from '@/server/logger';
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -25,6 +26,7 @@ interface WindowEntry {
 }
 
 const PRUNE_THRESHOLD = 1000;
+const MAX_KEYS = 10_000;
 
 // Válido para un solo proceso de servidor; en serverless usar Upstash
 export class InMemoryRateLimiter implements RateLimiter {
@@ -43,6 +45,8 @@ export class InMemoryRateLimiter implements RateLimiter {
     const entry = this.hits.get(key);
     if (!entry || entry.resetAt <= current) {
       const resetAt = current + windowMs;
+      this.evictOldest();
+      this.hits.delete(key);
       this.hits.set(key, { count: 1, resetAt });
       return { allowed: true, remaining: limit - 1, resetAt };
     }
@@ -53,6 +57,15 @@ export class InMemoryRateLimiter implements RateLimiter {
       remaining: Math.max(0, limit - entry.count),
       resetAt: entry.resetAt,
     };
+  }
+
+  // Tope duro: elimina las claves m�s antiguas (orden de inserci�n del Map)
+  private evictOldest(): void {
+    while (this.hits.size >= MAX_KEYS) {
+      const oldest = this.hits.keys().next();
+      if (oldest.done) return;
+      this.hits.delete(oldest.value);
+    }
   }
 
   private prune(current: number): void {
@@ -86,6 +99,7 @@ export class UpstashRateLimiter implements RateLimiter {
   }
 }
 
+let warnedInMemory = false;
 const CONTACT_LIMIT = 5;
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -96,6 +110,10 @@ export const createContactRateLimiter = (env: ServerEnv): RateLimiter => {
       token: env.UPSTASH_REDIS_REST_TOKEN,
       limit: CONTACT_LIMIT,
     });
+  }
+  if (env.NODE_ENV === 'production' && !warnedInMemory) {
+    warnedInMemory = true;
+    logger.warn('contact.rate_limiter_in_memory');
   }
   return new InMemoryRateLimiter({ limit: CONTACT_LIMIT, windowMs: ONE_HOUR_MS });
 };

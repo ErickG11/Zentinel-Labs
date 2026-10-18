@@ -39,6 +39,10 @@ export const renderContactEmail = (input: ContactInput): RenderedEmail => {
   return {
     subject: `Nueva solicitud de proyecto — ${singleLine(input.name)}`,
     html: `<div style="font-family:Arial,sans-serif;color:#0a0a0a"><h2>Nueva solicitud desde zentinel_labs.</h2><table>${htmlRows}</table><h3>Mensaje</h3><p style="white-space:pre-wrap">${escapeHtml(input.message)}</p></div>`,
-    text: [...rows.map(([label, value]) => `${label}: ${value}`), '', input.message].join('\n'),
+    text: [
+      ...rows.map(([label, value]) => `${label}: ${singleLine(value)}`),
+      '',
+      input.message,
+    ].join('\n'),
   };
 };

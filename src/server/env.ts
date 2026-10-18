@@ -19,10 +19,21 @@ const serverEnvSchema = z.object({
   UPSTASH_REDIS_REST_TOKEN: optional(z.string().min(10)),
 });
 
+const serverEnvSchemaChecked = serverEnvSchema.superRefine((env, ctx) => {
+  // Claves de prueba de Cloudflare (siempre pasan): prohibidas en producci�n
+  if (env.NODE_ENV === 'production' && /^[123]x0000/.test(env.TURNSTILE_SECRET_KEY ?? '')) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['TURNSTILE_SECRET_KEY'],
+      message: 'Turnstile test secret keys (1x0000/2x0000/3x0000) are not allowed in production',
+    });
+  }
+});
+
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
 
 export const parseServerEnv = (source: Record<string, string | undefined>): ServerEnv => {
-  const result = serverEnvSchema.safeParse(source);
+  const result = serverEnvSchemaChecked.safeParse(source);
   if (!result.success) {
     throw new Error(`Invalid environment variables:\n${z.prettifyError(result.error)}`);
   }

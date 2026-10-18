@@ -7,7 +7,7 @@ const complete = {
   RESEND_API_KEY: 're_123456789',
   CONTACT_TO_EMAIL: 'hola@zentinel.dev',
   CONTACT_FROM_EMAIL: 'Zentinel Labs <web@zentinel.dev>',
-  TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA',
+  TURNSTILE_SECRET_KEY: '0x4AAAAAAAreal-secret-value',
 };
 
 describe('parseServerEnv', () => {
@@ -35,7 +35,7 @@ describe('getContactConfig', () => {
       resendApiKey: 're_123456789',
       toEmail: 'hola@zentinel.dev',
       fromEmail: 'Zentinel Labs <web@zentinel.dev>',
-      turnstileSecret: '1x0000000000000000000000000000000AA',
+      turnstileSecret: '0x4AAAAAAAreal-secret-value',
     });
     expect(getContactConfig(parseServerEnv({ ...complete, RESEND_API_KEY: '' }))).toBeNull();
   });

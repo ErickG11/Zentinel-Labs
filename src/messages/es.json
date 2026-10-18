@@ -47,7 +47,11 @@
     "errors": {
       "name": { "min": "Ingresa tu nombre", "max": "El nombre es demasiado largo" },
       "email": { "invalid": "Ingresa un email válido" },
-      "company": { "max": "El nombre de la empresa es demasiado largo" },
+      "company": {
+        "max": "El nombre de la empresa es demasiado largo",
+        "invalid": "El nombre de la empresa no es válido"
+      },
+      "website": { "invalid": "Campo no válido" },
       "projectType": { "required": "Elige un tipo de proyecto" },
       "budget": { "required": "Elige un rango de presupuesto" },
       "message": {

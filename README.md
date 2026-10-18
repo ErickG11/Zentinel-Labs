@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zentinel Labs — Sitio web
 
-## Getting Started
+Sitio corporativo de Zentinel Labs (desarrollo de software a medida). Next.js 16 + TypeScript + Tailwind CSS v4, animaciones con GSAP, Lenis, Motion y React Three Fiber, bilingüe ES/EN.
 
-First, run the development server:
+## Requisitos
+
+- Node.js ≥ 20.9
+- npm
+
+## Inicio rápido
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # completar valores (ver abajo)
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable                                                   | Uso                                             |
+| ---------------------------------------------------------- | ----------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                                     | URL pública (canonical, sitemap, OG)            |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER`                              | Número de WhatsApp (solo dígitos)               |
+| `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | Envío del formulario con Resend                 |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`   | Cloudflare Turnstile (anti-bots)                |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`       | Rate limit compartido (requerido en serverless) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Sin las variables de Resend el sitio funciona y el formulario ofrece WhatsApp como alternativa.
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Script                                    | Descripción                                  |
+| ----------------------------------------- | -------------------------------------------- |
+| `npm run dev`                             | Desarrollo                                   |
+| `npm run build` / `npm run start`         | Build y servidor de producción               |
+| `npm run lint` / `npm run typecheck`      | ESLint / TypeScript                          |
+| `npm run format` / `npm run format:check` | Prettier                                     |
+| `npm run test`                            | Tests unitarios (Vitest)                     |
+| `npm run test:e2e`                        | Tests E2E + accesibilidad (Playwright + axe) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Seguridad
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- CSP estricta con nonce por request (`src/proxy.ts`) y headers de seguridad (`src/lib/security/headers.ts`).
+- Formulario: honeypot, rate limit (5/h por IP), Turnstile y validación Zod en cliente y servidor.
+- Secretos solo en servidor, validados al arrancar (`src/server/env.ts`).
+- `npm audit` en CI y Dependabot semanal.
 
-## Deploy on Vercel
+## Estructura
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/            # rutas (App Router) y metadata routes
+├── components/     # sections, layout, ui, hero, three, case, contact, remote, providers
+├── content/        # contenido tipado ES/EN
+├── hooks/          # hooks de cliente
+├── i18n/           # next-intl
+├── lib/            # utilidades compartidas (animación, seo, validación…)
+├── messages/       # textos de interfaz
+└── server/         # lógica solo de servidor (contacto, seguridad, env, logger)
+```

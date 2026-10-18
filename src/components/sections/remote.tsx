@@ -39,7 +39,12 @@ export async function Remote() {
         </div>
         <Reveal delay={0.1}>
           <GlassCard className="rounded-3xl p-4">
-            <Globe hint={t('hint')} errorMessage={t('error')} />
+            <Globe
+              hint={t('hint')}
+              errorMessage={t('error')}
+              label={t('globeLabel')}
+              retryLabel={t('retry')}
+            />
           </GlassCard>
         </Reveal>
       </div>

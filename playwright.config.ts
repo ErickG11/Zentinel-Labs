@@ -18,5 +18,10 @@ export default defineConfig({
     url: `http://localhost:${PORT}/es`,
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
+    env: {
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
+      TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA',
+      NEXT_PUBLIC_WHATSAPP_NUMBER: '593000000000',
+    },
   },
 });

@@ -153,5 +153,9 @@
     "languages": "Service in Spanish and English",
     "hint": "Drag to rotate · Wheel to zoom",
     "error": "The map could not be loaded"
+  },
+  "Faq": {
+    "eyebrow": "// faq",
+    "title": "Frequently asked questions"
   }
 }

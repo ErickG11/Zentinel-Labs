@@ -1,3 +1,5 @@
+import { Contact } from '@/components/sections/contact';
+import { Faq } from '@/components/sections/faq';
 import { Hero } from '@/components/sections/hero';
 import { Manifesto } from '@/components/sections/manifesto';
 import { Process } from '@/components/sections/process';
@@ -16,6 +18,8 @@ export default function HomePage() {
       <Process />
       <Stats />
       <Remote />
+      <Faq />
+      <Contact />
     </main>
   );
 }

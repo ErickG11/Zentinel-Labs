@@ -153,5 +153,9 @@
     "languages": "Atención en español e inglés",
     "hint": "Arrastra para rotar · Rueda para zoom",
     "error": "No se pudo cargar el mapa"
+  },
+  "Faq": {
+    "eyebrow": "// faq",
+    "title": "Preguntas frecuentes"
   }
 }

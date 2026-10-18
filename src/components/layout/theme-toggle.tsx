@@ -10,14 +10,14 @@ const ICON_BASE =
 
 export function ThemeToggle() {
   const t = useTranslations('ThemeToggle');
-  const { toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={t('label')}
-      className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-full text-ink glass transition-transform hover:scale-105"
+      aria-label={theme === 'dark' ? t('toLight') : t('toDark')}
+      className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-full text-ink glass transition-transform hover:scale-105 pointer-coarse:h-11 pointer-coarse:w-11"
     >
       <Moon
         aria-hidden

@@ -22,7 +22,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit';
   variant?: 'primary' | 'secondary';
-  size?: 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   icon?: ReactNode;
   disabled?: boolean;
   cursorLabel?: string;
@@ -42,7 +42,11 @@ const VARIANTS = {
   },
 } as const;
 
-const SIZES = { md: 'h-11 px-6 text-sm', lg: 'h-14 px-8 text-base' } as const;
+const SIZES = {
+  sm: 'h-11 px-4 text-sm',
+  md: 'h-11 px-6 text-sm',
+  lg: 'h-14 px-8 text-base',
+} as const;
 
 export function Button({
   children,

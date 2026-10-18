@@ -9,7 +9,7 @@ test('theme toggle switches to light and persists across reloads without flashin
   const html = page.locator('html');
   await expect(html).not.toHaveClass(/\blight\b/);
 
-  await page.getByRole('button', { name: 'Cambiar tema' }).click();
+  await page.getByRole('button', { name: 'Cambiar a modo claro' }).click();
   await expect(html).toHaveClass(/\blight\b/);
 
   // La clase debe existir ya en el primer paint, antes de que hidrate React
@@ -19,6 +19,6 @@ test('theme toggle switches to light and persists across reloads without flashin
     true,
   );
 
-  await page.getByRole('button', { name: 'Cambiar tema' }).click();
+  await page.getByRole('button', { name: 'Cambiar a modo oscuro' }).click();
   await expect(html).not.toHaveClass(/\blight\b/);
 });

@@ -15,5 +15,24 @@
   },
   "Preloader": {
     "label": "Cargando Zentinel Labs"
+  },
+  "Manifesto": {
+    "eyebrow": "// manifiesto",
+    "text": "Una web no es un folleto digital: es la herramienta que trabaja por tu negocio las 24 horas. Por eso escribimos cada línea a medida, cuidamos cada milisegundo de carga y diseñamos cada interacción para que tus clientes confíen en ti desde el primer clic."
+  },
+  "Services": {
+    "eyebrow": "// servicios",
+    "title": "Lo que construimos",
+    "description": "Tres líneas de trabajo, un mismo estándar: rendimiento, seguridad y diseño a medida."
+  },
+  "Process": {
+    "eyebrow": "// proceso",
+    "title": "Cómo trabajamos",
+    "description": "Un proceso claro, con entregas visibles y sin sorpresas."
+  },
+  "Stats": {
+    "eyebrow": "// estándares",
+    "title": "Calidad que se puede medir",
+    "ringsTitle": "Puntuación mínima de Lighthouse en cada entrega"
   }
 }

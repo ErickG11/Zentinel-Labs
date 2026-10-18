@@ -11,6 +11,22 @@ test('shows localized validation errors on an empty submit', async ({ page }) =>
   await expect(form.getByText('Elige un tipo de proyecto')).toBeVisible();
 });
 
+test('shows a live character counter and role=alert errors', async ({ page }) => {
+  await page.goto('/es#contact');
+  const form = page.locator('#contact form');
+  const message = form.getByLabel('Cuéntanos sobre tu proyecto');
+  await expect(form.getByText('0/2000')).toBeVisible();
+  await expect(form.getByText('Mínimo 20 caracteres')).toBeVisible();
+  await message.fill('Hola equipo');
+  await expect(form.getByText('11/2000')).toBeVisible();
+  await message.fill('Necesitamos un sistema de reservas.');
+  await expect(form.getByText('Mínimo 20 caracteres')).toHaveCount(0);
+  await form.getByRole('button', { name: 'Enviar solicitud' }).click();
+  const alert = form.getByRole('alert').filter({ hasText: 'Ingresa tu nombre' });
+  await expect(alert).toBeVisible();
+  await expect(alert.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+});
+
 test('submits through the server action and offers WhatsApp when email is not configured', async ({
   page,
 }) => {

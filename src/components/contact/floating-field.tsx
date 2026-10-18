@@ -1,5 +1,11 @@
-import { forwardRef, type InputHTMLAttributes, type TextareaHTMLAttributes } from 'react';
+import {
+  forwardRef,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type TextareaHTMLAttributes,
+} from 'react';
 import { cn } from '@/lib/utils';
+import { FieldError } from './field-error';
 
 interface FieldShellProps {
   id: string;
@@ -11,15 +17,6 @@ const CONTROL =
   'peer w-full rounded-2xl border bg-transparent px-5 pt-7 pb-3 text-base outline-none transition-colors duration-300 placeholder:text-transparent focus:border-ink';
 const LABEL =
   'pointer-events-none absolute top-2.5 left-5 text-xs text-muted transition-all duration-300 peer-placeholder-shown:top-[1.15rem] peer-placeholder-shown:text-base peer-focus:top-2.5 peer-focus:text-xs';
-
-function ErrorText({ id, error }: { id: string; error?: string }) {
-  if (!error) return null;
-  return (
-    <p id={`${id}-error`} className="mt-2 text-sm text-ink">
-      {error}
-    </p>
-  );
-}
 
 type InputProps = FieldShellProps & InputHTMLAttributes<HTMLInputElement>;
 
@@ -41,15 +38,23 @@ export const FloatingInput = forwardRef<HTMLInputElement, InputProps>(function F
       <label htmlFor={id} className={LABEL}>
         {label}
       </label>
-      <ErrorText id={id} error={error} />
+      <FieldError id={`${id}-error`}>{error}</FieldError>
     </div>
   );
 });
 
-type TextareaProps = FieldShellProps & TextareaHTMLAttributes<HTMLTextAreaElement>;
+interface TextareaExtras {
+  // Id de contenido auxiliar (p. ej. el contador) que tambien describe al campo
+  describedBy?: string;
+  // Contenido bajo el campo, tras el error
+  footer?: ReactNode;
+}
+
+type TextareaProps = FieldShellProps & TextareaExtras & TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 export const FloatingTextarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  function FloatingTextarea({ id, label, error, className, ...props }, ref) {
+  function FloatingTextarea({ id, label, error, describedBy, footer, className, ...props }, ref) {
+    const described = [error ? `${id}-error` : null, describedBy].filter(Boolean).join(' ');
     return (
       <div className={cn('relative', className)}>
         <textarea
@@ -58,14 +63,15 @@ export const FloatingTextarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           placeholder=" "
           rows={5}
           aria-invalid={Boolean(error)}
-          aria-describedby={error ? `${id}-error` : undefined}
+          aria-describedby={described || undefined}
           className={cn(CONTROL, 'resize-none', error ? 'border-ink' : 'border-border')}
           {...props}
         />
         <label htmlFor={id} className={LABEL}>
           {label}
         </label>
-        <ErrorText id={id} error={error} />
+        <FieldError id={`${id}-error`}>{error}</FieldError>
+        {footer}
       </div>
     );
   },

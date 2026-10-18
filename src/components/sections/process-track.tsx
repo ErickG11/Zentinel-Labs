@@ -54,7 +54,10 @@ export function ProcessTrack({ steps }: { steps: ProcessStep[] }) {
             key={step.number}
             className="flex flex-col gap-5 rounded-3xl p-8 glass md:w-[26rem] md:shrink-0 md:motion-reduce:w-[calc((100%-3rem)/3)]"
           >
-            <span className="font-display text-6xl font-semibold tracking-tighter text-ink/15">
+            <span
+              aria-hidden="true"
+              className="font-display text-6xl font-semibold tracking-tighter text-ink/50"
+            >
               {step.number}
             </span>
             <h3 className="font-display text-2xl font-semibold tracking-tight">{step.title}</h3>

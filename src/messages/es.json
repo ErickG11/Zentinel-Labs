@@ -62,8 +62,7 @@
       "email": "Email",
       "company": "Empresa (opcional)",
       "message": "Cuéntanos sobre tu proyecto",
-      "projectType": "Tipo de proyecto",
-      "budget": "Presupuesto estimado"
+      "projectType": "Tipo de proyecto"
     },
     "projectTypes": {
       "landing": "Web / landing",
@@ -101,9 +100,6 @@
       },
       "captcha": {
         "required": "Completa la verificación de seguridad"
-      },
-      "budget": {
-        "required": "Elige un rango de presupuesto"
       }
     },
     "responses": {
@@ -113,13 +109,6 @@
       "CAPTCHA_FAILED": "No pudimos verificar que eres humano. Inténtalo de nuevo.",
       "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
       "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
-    },
-    "budgets": {
-      "lt-1000": "Menos de $1.000",
-      "1000-3000": "$1.000 – $3.000",
-      "3000-7000": "$3.000 – $7.000",
-      "gt-7000": "Más de $7.000",
-      "undecided": "Aún no lo sé"
     }
   },
   "NotFound": {

@@ -15,31 +15,65 @@ const KEYWORDS = new Set([
   'import',
   'from',
   'new',
-  'type',
 ]);
+
+const TYPE_KEYWORD = 'type';
+
+const QUOTES = new Set(["'", '"', '`']);
 
 const classify = (part: string): TokenKind => {
   if (KEYWORDS.has(part)) return 'keyword';
-  if (part.includes("'")) return 'string';
+  if ([...part].some((char) => QUOTES.has(char))) return 'string';
   return 'plain';
 };
 
 export const tokenizeCode = (line: string): CodeToken[] => {
   if (line === '') return [];
-  const commentStart = line.indexOf('//');
-  const code = commentStart === -1 ? line : line.slice(0, commentStart);
-  const comment = commentStart === -1 ? '' : line.slice(commentStart);
+  const tokens: CodeToken[] = [];
+  let index = 0;
 
-  const tokens: CodeToken[] = code
-    .split(/(\s+)/)
-    .filter((part) => part !== '')
-    .map((part) => ({ text: part, kind: /^\s+$/.test(part) ? 'plain' : classify(part) }));
+  while (index < line.length) {
+    // Comentario: "//" solo cuenta fuera de comillas (se detecta abajo al escanear)
+    if (/\s/.test(line[index])) {
+      let end = index;
+      while (end < line.length && /\s/.test(line[end])) end++;
+      tokens.push({ text: line.slice(index, end), kind: 'plain' });
+      index = end;
+      continue;
+    }
 
-  // "type" solo es keyword al inicio de la línea; como propiedad es texto plano
-  tokens.forEach((token, index) => {
-    if (token.text === 'type' && index !== 0) token.kind = 'plain';
-  });
+    let end = index;
+    let quote: string | null = null;
+    let commentAt = -1;
+    while (end < line.length) {
+      const char = line[end];
+      if (quote) {
+        if (char === quote) quote = null;
+      } else if (QUOTES.has(char)) {
+        quote = char;
+      } else if (/\s/.test(char)) {
+        break;
+      } else if (char === '/' && line[end + 1] === '/') {
+        commentAt = end;
+        break;
+      }
+      end++;
+    }
 
-  if (comment) tokens.push({ text: comment, kind: 'comment' });
+    if (commentAt !== -1) {
+      if (commentAt > index) tokens.push(makeWord(line.slice(index, commentAt), tokens));
+      tokens.push({ text: line.slice(commentAt), kind: 'comment' });
+      return tokens;
+    }
+    tokens.push(makeWord(line.slice(index, end), tokens));
+    index = end;
+  }
   return tokens;
+};
+
+// "type" solo es keyword como primer token no vacío de la línea
+const makeWord = (text: string, previous: CodeToken[]): CodeToken => {
+  const isFirst = previous.every((token) => token.kind === 'plain' && /^\s+$/.test(token.text));
+  if (text === TYPE_KEYWORD) return { text, kind: isFirst ? 'keyword' : 'plain' };
+  return { text, kind: classify(text) };
 };

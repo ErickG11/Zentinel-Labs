@@ -96,6 +96,7 @@ export function Terminal() {
 
   return (
     <motion.div
+      aria-hidden="true"
       className="relative w-full max-w-md"
       initial={{ rotate: -2 }}
       animate={{ rotate: -2 }}

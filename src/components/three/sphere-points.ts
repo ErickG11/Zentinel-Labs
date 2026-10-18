@@ -2,7 +2,12 @@ const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
 // Distribución de Fibonacci: puntos casi equidistantes sobre la esfera
 export const createSpherePoints = (count: number, radius: number): Float32Array => {
-  const points = new Float32Array(count * 3);
+  const points = new Float32Array(Math.max(count, 0) * 3);
+  if (count <= 0) return points;
+  if (count === 1) {
+    points[1] = radius;
+    return points;
+  }
   for (let i = 0; i < count; i++) {
     const y = 1 - (i / (count - 1)) * 2;
     const ring = Math.sqrt(1 - y * y);

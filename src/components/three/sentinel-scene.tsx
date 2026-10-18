@@ -9,6 +9,9 @@ import { createDispersionSeeds, createSpherePoints } from './sphere-points';
 
 const POINT_COUNT = 3200;
 const RADIUS = 1.55;
+const MAX_DELTA = 0.1;
+// Equivale a un lerp de 0.04 por frame a 60 Hz: -ln(0.96) * 60
+const FOLLOW_RATE = 2.45;
 
 interface PointerTarget {
   x: number;
@@ -23,6 +26,7 @@ function ParticleSphere() {
   const positions = useMemo(() => base.slice(), [base]);
   const scrollProgress = useRef(0);
   const pointer = useRef<PointerTarget>({ x: 0, y: 0 });
+  const elapsed = useRef(0);
 
   useEffect(() => {
     const handleScroll = (): void => {
@@ -50,12 +54,15 @@ function ParticleSphere() {
     };
   }, []);
 
-  useFrame((state, delta) => {
+  useFrame((_state, rawDelta) => {
     const points = pointsRef.current;
     const material = materialRef.current;
     if (!points || !material) return;
 
-    const time = state.clock.elapsedTime;
+    const delta = Math.min(rawDelta, MAX_DELTA);
+    elapsed.current += delta;
+    const time = elapsed.current;
+    const follow = 1 - Math.exp(-FOLLOW_RATE * delta);
     const dispersion = scrollProgress.current;
     const attribute = points.geometry.getAttribute('position') as BufferAttribute;
     const array = attribute.array as Float32Array;
@@ -75,8 +82,8 @@ function ParticleSphere() {
 
     // Rotación continua + inercia hacia el puntero
     points.rotation.y += delta * 0.07;
-    points.rotation.x += (pointer.current.y * 0.35 - points.rotation.x) * 0.04;
-    points.rotation.z += (-pointer.current.x * 0.2 - points.rotation.z) * 0.04;
+    points.rotation.x += (pointer.current.y * 0.35 - points.rotation.x) * follow;
+    points.rotation.z += (-pointer.current.x * 0.2 - points.rotation.z) * follow;
     material.opacity = 0.85 - dispersion * 0.6;
   });
 
@@ -106,7 +113,7 @@ export default function SentinelScene({ active }: SentinelSceneProps) {
     <Canvas
       dpr={[1, 1.75]}
       camera={{ position: [0, 0, 4.2], fov: 45 }}
-      gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+      gl={{ alpha: true }}
       frameloop={active ? 'always' : 'never'}
     >
       <ParticleSphere />

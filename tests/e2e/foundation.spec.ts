@@ -49,13 +49,15 @@ test('uses a fresh nonce per request and applies it to every inline script', asy
   const nonce = /'nonce-([^']+)'/.exec(csp)?.[1];
   expect(nonce).toBeTruthy();
 
-  const scriptsWithoutNonce = await page.evaluate(
-    (expected) =>
-      Array.from(document.scripts).filter((script) => !script.src && script.nonce !== expected)
-        .length,
-    nonce,
+  const inlineScripts = await page.evaluate(() =>
+    Array.from(document.scripts)
+      .filter((script) => !script.src)
+      .map((script) => script.nonce),
   );
-  expect(scriptsWithoutNonce).toBe(0);
+  expect(inlineScripts.length).toBeGreaterThan(0);
+  for (const scriptNonce of inlineScripts) {
+    expect(scriptNonce).toBe(nonce);
+  }
 
   const second = await page.reload();
   expect(second?.headers()['content-security-policy']).not.toContain(`'nonce-${nonce}'`);

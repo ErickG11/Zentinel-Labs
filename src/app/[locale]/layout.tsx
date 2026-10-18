@@ -3,7 +3,9 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { Background } from '@/components/layout/background';
 import { routing } from '@/i18n/routing';
+import { fontVariables } from '@/lib/fonts';
 import '../globals.css';
 
 interface LocaleLayoutProps {
@@ -24,8 +26,9 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   if (!hasLocale(routing.locales, locale)) notFound();
 
   return (
-    <html lang={locale}>
-      <body className="min-h-dvh">
+    <html lang={locale} className={fontVariables}>
+      <body className="relative min-h-dvh">
+        <Background />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

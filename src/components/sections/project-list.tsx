@@ -10,6 +10,8 @@ import type { Project, ProjectStatus } from '@/content/projects';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { EASE_OUT_EXPO, FINE_POINTER_QUERY, REDUCED_MOTION_QUERY } from '@/lib/motion';
 
+const PREVIEW_MIN_Y = 180;
+
 export interface ProjectListItem {
   project: Project;
   href: string;
@@ -30,7 +32,8 @@ export function ProjectList({ items, viewLabel, statusLabels }: ProjectListProps
 
   const handlePointerMove = (event: PointerEvent<HTMLUListElement>): void => {
     x.set(event.clientX);
-    y.set(event.clientY);
+    // La vista previa sube 70% de su alto (15rem): se limita para no salir por arriba
+    y.set(Math.max(event.clientY, PREVIEW_MIN_Y));
   };
 
   const activeProject = items.find((item) => item.project.slug === active)?.project;
@@ -61,13 +64,13 @@ export function ProjectList({ items, viewLabel, statusLabels }: ProjectListProps
               href={href}
               label={project.name}
               cursorLabel={viewLabel}
-              className="group grid gap-6 py-10 transition-opacity duration-500 group-hover/list:opacity-40 hover:!opacity-100 md:grid-cols-[4rem_1fr_auto] md:items-center"
+              className="group grid gap-6 py-10 transition-opacity duration-500 focus-visible:!opacity-100 md:grid-cols-[2.5rem_1fr_auto] md:items-center md:gap-x-4 [@media(hover:hover)]:group-hover/list:opacity-40 [@media(hover:hover)]:hover:!opacity-100"
             >
               <span className="font-mono text-sm text-muted">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <span className="flex flex-col gap-3">
-                <span className="font-display text-4xl font-semibold tracking-tight transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3 sm:text-6xl">
+                <span className="font-display text-4xl font-semibold tracking-tight transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:text-6xl [@media(hover:hover)]:group-hover:translate-x-3">
                   {project.name}
                 </span>
                 <span className="text-muted">{project.summary}</span>

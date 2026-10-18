@@ -139,5 +139,26 @@
     "title": "Something went wrong",
     "text": "An unexpected error occurred. You can try again.",
     "retry": "Try again"
+  },
+  "WhatsApp": {
+    "label": "Message us on WhatsApp",
+    "message": "Hi Zentinel Labs, I would like a quote for a project."
+  },
+  "Footer": {
+    "tagline": "Custom software development from Ecuador to the world.",
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "rights": "All rights reserved.",
+    "madeIn": "Handcrafted in Ecuador."
+  },
+  "Remote": {
+    "eyebrow": "// remote",
+    "title": "From Ecuador, for the world",
+    "description": "We work remotely with clients in any time zone, with clear communication and weekly deliveries.",
+    "location": "Santo Domingo, Ecuador · UTC−5",
+    "meetings": "Video call meetings",
+    "languages": "Service in Spanish and English",
+    "hint": "Drag to rotate · Wheel to zoom",
+    "error": "The map could not be loaded"
   }
 }

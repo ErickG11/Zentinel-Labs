@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Background } from '@/components/layout/background';
+import { Footer } from '@/components/layout/footer';
 import { Navbar } from '@/components/layout/navbar';
 import { Preloader } from '@/components/layout/preloader';
 import { SkipLink } from '@/components/layout/skip-link';
@@ -82,6 +83,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             <Preloader />
             <Navbar />
             {children}
+            <Footer />
             <Cursor />
           </Providers>
         </NextIntlClientProvider>

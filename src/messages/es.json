@@ -139,5 +139,26 @@
     "title": "Algo salió mal",
     "text": "Ocurrió un error inesperado. Puedes intentarlo de nuevo.",
     "retry": "Reintentar"
+  },
+  "WhatsApp": {
+    "label": "Escríbenos por WhatsApp",
+    "message": "Hola Zentinel Labs, quiero cotizar un proyecto."
+  },
+  "Footer": {
+    "tagline": "Desarrollo de software a medida desde Ecuador para el mundo.",
+    "navigation": "Navegación",
+    "contact": "Contacto",
+    "rights": "Todos los derechos reservados.",
+    "madeIn": "Hecho con código a medida en Ecuador."
+  },
+  "Remote": {
+    "eyebrow": "// remoto",
+    "title": "Desde Ecuador, para el mundo",
+    "description": "Trabajamos de forma remota con clientes en cualquier zona horaria, con comunicación clara y entregas semanales.",
+    "location": "Santo Domingo, Ecuador · UTC−5",
+    "meetings": "Reuniones por videollamada",
+    "languages": "Atención en español e inglés",
+    "hint": "Arrastra para rotar · Rueda para zoom",
+    "error": "No se pudo cargar el mapa"
   }
 }

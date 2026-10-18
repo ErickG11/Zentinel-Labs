@@ -128,7 +128,7 @@ Cada sección: eyebrow mono → h2 display (SplitText reveal por líneas) → co
 
 ## 7. Páginas de caso `/[locale]/proyectos/[slug]`
 
-- SSG con `generateStaticParams` desde `content/projects.ts`; slug inexistente → `notFound()`.
+- Slugs válidos definidos en `content/projects.ts`; slug inexistente → `notFound()`. Render dinámico (requerido por la CSP con nonce, ver §9).
 - Estructura: hero con imagen full-bleed que escala con scroll → ficha (cliente, año, rol, stack) → Reto / Solución / Resultado → galería con parallax → "Siguiente proyecto" (hover con preview, prefetch).
 - Contenido derivado de los repos locales de Pan de Vida y GasSolution, **sin inventar métricas**; textos marcados `// TODO: Erick revisar`. Imágenes placeholder hasta recibir capturas reales.
 
@@ -143,7 +143,8 @@ Cada sección: eyebrow mono → h2 display (SplitText reveal por líneas) → co
 
 ## 9. Seguridad
 
-- **Content-Security-Policy estricta con nonce** generada en `proxy.ts`: `default-src 'self'`; `script-src 'self' 'nonce-…' 'strict-dynamic' https://challenges.cloudflare.com`; `frame-src https://challenges.cloudflare.com`; `img-src 'self' data: blob:`; `connect-src 'self'`; `object-src 'none'`; `base-uri 'self'`; `form-action 'self'`; `frame-ancestors 'none'`; `upgrade-insecure-requests`.
+- **Decisión (2026-10-17):** se prioriza CSP con nonce sobre SSG → todas las páginas se renderizan dinámicamente por request (sin caché CDN del HTML). Costo extra en hosting: despreciable a tráfico moderado. Hosting a decidir en Fase 7 (Vercel Hobby no permite uso comercial; candidatos: Cloudflare Workers/OpenNext, Netlify, Vercel Pro).
+- **Content-Security-Policy estricta con nonce** generada en `proxy.ts`: `default-src 'self'`; `script-src 'self' 'nonce-…' 'strict-dynamic' https://challenges.cloudflare.com`; `style-src-elem 'self' 'nonce-…'`; `style-src-attr 'unsafe-inline'` (estilos inline de Motion/GSAP en el HTML del servidor); `frame-src https://challenges.cloudflare.com`; `img-src 'self' data: blob:`; `connect-src 'self'`; `object-src 'none'`; `base-uri 'self'`; `form-action 'self'`; `frame-ancestors 'none'`; `upgrade-insecure-requests`.
 - **Headers** (en `next.config.ts` `headers()`): `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (cámara, micrófono, geolocalización, etc. deshabilitados), `Cross-Origin-Opener-Policy: same-origin`; `poweredByHeader: false`.
 - **Validación**: todo input re-validado con Zod en servidor; límites de longitud; enums cerrados.
 - **Anti-abuso**: honeypot + Cloudflare Turnstile + rate limit por IP (5 envíos / hora). En memoria por defecto (válido para un solo servidor); Upstash Redis si las env existen (necesario en serverless/Vercel).

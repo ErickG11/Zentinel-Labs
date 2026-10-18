@@ -15,5 +15,18 @@
   },
   "Preloader": {
     "label": "Loading Zentinel Labs"
+  },
+  "Nav": {
+    "services": "Services",
+    "process": "Process",
+    "work": "Work",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "cta": "Get a quote",
+    "menu": "Open menu",
+    "close": "Close menu",
+    "skip": "Skip to content",
+    "language": "Change language",
+    "home": "Zentinel Labs — home"
   }
 }

@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+test.use({ reducedMotion: 'reduce' });
+
 test('theme toggle switches to light and persists across reloads without flashing', async ({
   page,
 }) => {

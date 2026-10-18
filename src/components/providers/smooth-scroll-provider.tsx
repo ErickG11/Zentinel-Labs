@@ -33,34 +33,55 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
   const pathname = usePathname();
 
+  const previousPathRef = useRef(pathname);
+
   useEffect(() => {
-    if (window.matchMedia(REDUCED_MOTION_QUERY).matches) return;
+    const mql = window.matchMedia(REDUCED_MOTION_QUERY);
+    let teardown: (() => void) | null = null;
 
-    const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1 });
-    lenisRef.current = lenis;
-    lenis.on('scroll', ScrollTrigger.update);
+    const create = (): void => {
+      if (teardown) return;
+      const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1 });
+      lenisRef.current = lenis;
+      lenis.on('scroll', ScrollTrigger.update);
 
-    const onTick = (time: number): void => lenis.raf(time * 1000);
-    gsap.ticker.add(onTick);
-    gsap.ticker.lagSmoothing(0);
+      const onTick = (time: number): void => lenis.raf(time * 1000);
+      gsap.ticker.add(onTick);
+      // Intencional: sin suavizado de lag para sincronizar con Lenis; el provider vive toda la app
+      gsap.ticker.lagSmoothing(0);
+
+      teardown = () => {
+        gsap.ticker.remove(onTick);
+        lenis.destroy();
+        lenisRef.current = null;
+        teardown = null;
+      };
+    };
+
+    const sync = (): void => {
+      if (mql.matches) teardown?.();
+      else create();
+    };
+
+    sync();
+    mql.addEventListener('change', sync);
 
     return () => {
-      gsap.ticker.remove(onTick);
-      lenis.destroy();
-      lenisRef.current = null;
+      mql.removeEventListener('change', sync);
+      teardown?.();
     };
   }, []);
 
-  // Al cambiar de página: ir al hash si viene uno (p. ej. /es#contact), si no, arriba
+  // Al cambiar de página con hash (p. ej. /es#contact): ir a la sección. Next ya gestiona el scroll nativo
   useEffect(() => {
-    const lenis = lenisRef.current;
-    if (!lenis) return;
+    if (previousPathRef.current === pathname) return;
+    previousPathRef.current = pathname;
     const hash = window.location.hash;
-    if (hash) {
-      requestAnimationFrame(() => lenis.scrollTo(hash, { offset: NAVBAR_OFFSET }));
-      return;
-    }
-    lenis.scrollTo(0, { immediate: true });
+    if (!hash) return;
+    const frame = requestAnimationFrame(() => {
+      lenisRef.current?.scrollTo(hash, { offset: NAVBAR_OFFSET });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [pathname]);
 
   const api = useMemo<SmoothScrollApi>(

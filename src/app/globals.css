@@ -143,8 +143,13 @@
 }
 
 /* Texto que SplitText va a animar: oculto hasta que se divide (solo si hay movimiento) */
-html[data-motion='ok'] [data-split-pending] {
+html[data-motion='ok']:not([data-failsafe]) [data-split-pending] {
   visibility: hidden;
+}
+
+/* Fail-safe: si el JS de la app no limpia el estado a tiempo, el preloader se oculta */
+html[data-failsafe] [data-preloader] {
+  display: none;
 }
 
 /* El preloader solo existe en la primera visita de la sesión */

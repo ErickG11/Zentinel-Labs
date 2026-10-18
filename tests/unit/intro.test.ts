@@ -9,9 +9,14 @@ import {
   shouldPlayIntro,
 } from '@/lib/intro';
 
+const originalMatchMedia = window.matchMedia;
+
 afterEach(() => {
+  vi.useRealTimers();
+  window.matchMedia = originalMatchMedia;
   delete document.documentElement.dataset.intro;
   delete document.documentElement.dataset.motion;
+  document.documentElement.removeAttribute('data-failsafe');
   sessionStorage.clear();
 });
 
@@ -36,6 +41,12 @@ describe('markIntroDone', () => {
     expect(sessionStorage.getItem(INTRO_SESSION_KEY)).toBe('1');
     expect(listener).toHaveBeenCalledTimes(1);
     window.removeEventListener(INTRO_DONE_EVENT, listener);
+  });
+
+  it('is safe to call twice', () => {
+    markIntroDone();
+    expect(() => markIntroDone()).not.toThrow();
+    expect(document.documentElement.dataset.intro).toBe('done');
   });
 });
 
@@ -63,5 +74,23 @@ describe('introInitScript', () => {
     run();
     expect(document.documentElement.dataset.intro).toBe('skip');
     expect(document.documentElement.dataset.motion).toBe('reduce');
+  });
+
+  it('treats a throwing matchMedia as reduced motion', () => {
+    window.matchMedia = vi.fn().mockImplementation(() => {
+      throw new Error('boom');
+    });
+    run();
+    expect(document.documentElement.dataset.motion).toBe('reduce');
+    expect(document.documentElement.dataset.intro).toBe('skip');
+  });
+
+  it('sets the fail-safe attribute after 8 seconds', () => {
+    vi.useFakeTimers();
+    window.matchMedia = vi.fn().mockReturnValue({ matches: false });
+    run();
+    expect(document.documentElement.hasAttribute('data-failsafe')).toBe(false);
+    vi.advanceTimersByTime(8000);
+    expect(document.documentElement.hasAttribute('data-failsafe')).toBe(true);
   });
 });

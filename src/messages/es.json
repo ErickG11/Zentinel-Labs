@@ -52,5 +52,81 @@
     "eyebrow": "// estándares",
     "title": "Calidad que se puede medir",
     "ringsTitle": "Puntuación mínima de Lighthouse en cada entrega"
+  },
+  "Home": {
+    "eyebrow": "// zentinel-labs",
+    "title": "Software a medida,",
+    "titleHighlight": "hecho para escalar.",
+    "subtitle": "Webs corporativas, aplicaciones web y e-commerce construidos con tecnología de primer nivel.",
+    "status": "Sitio en construcción"
+  },
+  "Contact": {
+    "eyebrow": "// contacto",
+    "title": "Hablemos de tu proyecto",
+    "description": "Cuéntanos qué necesitas y te respondemos con una propuesta a medida.",
+    "fields": {
+      "name": "Nombre",
+      "email": "Email",
+      "company": "Empresa (opcional)",
+      "message": "Cuéntanos sobre tu proyecto",
+      "projectType": "Tipo de proyecto",
+      "budget": "Presupuesto estimado"
+    },
+    "projectTypes": {
+      "landing": "Web / landing",
+      "webapp": "App web a medida",
+      "ecommerce": "E-commerce",
+      "other": "Otro"
+    },
+    "budgets": {
+      "lt-1000": "Menos de $1.000",
+      "1000-3000": "$1.000 – $3.000",
+      "3000-7000": "$3.000 – $7.000",
+      "gt-7000": "Más de $7.000",
+      "undecided": "Aún no lo sé"
+    },
+    "submit": "Enviar solicitud",
+    "sending": "Enviando…",
+    "sent": "¡Enviado!",
+    "retry": "Reintentar",
+    "whatsappAlt": "Escríbenos por WhatsApp",
+    "honeypot": "No completar este campo",
+    "errors": {
+      "name": {
+        "min": "Ingresa tu nombre",
+        "max": "El nombre es demasiado largo"
+      },
+      "email": {
+        "invalid": "Ingresa un email válido"
+      },
+      "company": {
+        "max": "El nombre de la empresa es demasiado largo",
+        "invalid": "El nombre de la empresa no es válido"
+      },
+      "website": {
+        "invalid": "Campo no válido"
+      },
+      "projectType": {
+        "required": "Elige un tipo de proyecto"
+      },
+      "budget": {
+        "required": "Elige un rango de presupuesto"
+      },
+      "message": {
+        "min": "Cuéntanos un poco más (mínimo 20 caracteres)",
+        "max": "El mensaje es demasiado largo"
+      },
+      "captcha": {
+        "required": "Completa la verificación de seguridad"
+      }
+    },
+    "responses": {
+      "success": "Gracias. Recibimos tu solicitud y te responderemos pronto.",
+      "VALIDATION_ERROR": "Revisa los campos marcados.",
+      "RATE_LIMITED": "Demasiados envíos seguidos. Inténtalo de nuevo en una hora.",
+      "CAPTCHA_FAILED": "No pudimos verificar que eres humano. Inténtalo de nuevo.",
+      "EMAIL_FAILED": "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.",
+      "SERVICE_UNAVAILABLE": "El formulario no está disponible en este momento. Escríbenos por WhatsApp."
+    }
   }
 }

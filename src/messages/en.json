@@ -52,5 +52,81 @@
     "eyebrow": "// standards",
     "title": "Quality you can measure",
     "ringsTitle": "Minimum Lighthouse score on every delivery"
+  },
+  "Home": {
+    "eyebrow": "// zentinel-labs",
+    "title": "Custom software,",
+    "titleHighlight": "built to scale.",
+    "subtitle": "Corporate websites, web applications and e-commerce built with first-class technology.",
+    "status": "Site under construction"
+  },
+  "Contact": {
+    "eyebrow": "// contact",
+    "title": "Let's talk about your project",
+    "description": "Tell us what you need and we will reply with a tailored proposal.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company (optional)",
+      "message": "Tell us about your project",
+      "projectType": "Project type",
+      "budget": "Estimated budget"
+    },
+    "projectTypes": {
+      "landing": "Website / landing",
+      "webapp": "Custom web app",
+      "ecommerce": "E-commerce",
+      "other": "Other"
+    },
+    "budgets": {
+      "lt-1000": "Under $1,000",
+      "1000-3000": "$1,000 – $3,000",
+      "3000-7000": "$3,000 – $7,000",
+      "gt-7000": "Over $7,000",
+      "undecided": "Not sure yet"
+    },
+    "submit": "Send request",
+    "sending": "Sending…",
+    "sent": "Sent!",
+    "retry": "Try again",
+    "whatsappAlt": "Message us on WhatsApp",
+    "honeypot": "Leave this field empty",
+    "errors": {
+      "name": {
+        "min": "Enter your name",
+        "max": "The name is too long"
+      },
+      "email": {
+        "invalid": "Enter a valid email"
+      },
+      "company": {
+        "max": "The company name is too long",
+        "invalid": "The company name is not valid"
+      },
+      "website": {
+        "invalid": "Invalid field"
+      },
+      "projectType": {
+        "required": "Choose a project type"
+      },
+      "budget": {
+        "required": "Choose a budget range"
+      },
+      "message": {
+        "min": "Tell us a bit more (at least 20 characters)",
+        "max": "The message is too long"
+      },
+      "captcha": {
+        "required": "Complete the security check"
+      }
+    },
+    "responses": {
+      "success": "Thank you. We received your request and will reply soon.",
+      "VALIDATION_ERROR": "Please review the highlighted fields.",
+      "RATE_LIMITED": "Too many submissions. Please try again in an hour.",
+      "CAPTCHA_FAILED": "We could not verify you are human. Please try again.",
+      "EMAIL_FAILED": "We could not send your message. Try again or message us on WhatsApp.",
+      "SERVICE_UNAVAILABLE": "The form is unavailable right now. Please message us on WhatsApp."
+    }
   }
 }
